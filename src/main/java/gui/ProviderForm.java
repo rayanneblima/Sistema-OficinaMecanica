@@ -1,0 +1,567 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package gui;
+
+import classes.Provider;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.text.MaskFormatter;
+
+/**
+ *
+ * @author Rayanne
+ */
+public class ProviderForm extends javax.swing.JFrame {
+
+    List<Provider> list;
+    Provider providerEditing;
+
+    public ProviderForm() {
+        this.list = new ArrayList<>();
+        this.providerEditing = null;
+        
+        initComponents();
+        try {
+            MaskFormatter maskTel = new MaskFormatter("(##) #####-####");
+            MaskFormatter maskCnpj = new MaskFormatter("##.###.###/####-##");
+            MaskFormatter maskCnpj2 = new MaskFormatter("##.###.###/####-##");
+            MaskFormatter maskEmail = new MaskFormatter("##/##/####");
+            
+            maskTel.install(ftxtTel);
+            maskCnpj.install(ftxtCnpj);
+            maskCnpj2.install(ftxtSearch);
+        } catch(ParseException ex) {
+            Logger.getLogger(EmployeeForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        this.enableFields(false);
+        this.clearFields();
+        txtListing.setEnabled(false);
+    }
+    
+    public boolean verifyCNPJ(String cpf) {
+        //TODO
+        return true;
+    }
+
+    public void enableFields(boolean flag) {
+        for(int i = 0; i < pnlInputs.getComponents().length; i++){
+            pnlInputs.getComponent(i).setEnabled(flag);
+        }
+    }
+    
+    public void clearFields() {
+        txtCompanyName.setText("");
+        ftxtCnpj.setText("");
+        ftxtTel.setText("");
+        ftxtEmail.setText("");
+        txtAddress.setText("");
+        txtProduct.setText("");
+        txtResponsibleName.setText("");
+    }
+    
+    public void fieldsToObject() {
+        Provider p = new Provider();
+        
+        p.setCompanyName(txtCompanyName.getText());
+        p.setCnpj(ftxtCnpj.getText());
+        p.setTel(ftxtTel.getText());
+        p.setEmail(ftxtEmail.getText());
+        p.setAddress(txtAddress.getText());
+        p.setProduct(txtProduct.getText());
+        p.setResponsibleName(txtResponsibleName.getText());
+        
+        list.add(p);
+    }
+    
+    public void objectToFields(Provider p) {        
+        txtCompanyName.setText(p.getCompanyName());
+        ftxtCnpj.setText(p.getCnpj());
+        ftxtTel.setText(p.getTel());
+        ftxtEmail.setText(p.getEmail());
+        txtAddress.setText(p.getAddress());
+        txtProduct.setText(p.getProduct());
+        txtResponsibleName.setText(p.getResponsibleName());    
+    }
+    
+    public String printProviderList() {
+        String totalList = "";
+        for(int i = 0; i < list.size(); i++) {
+            totalList = totalList + list.get(i).printProviderToString();
+        }
+        return totalList;
+    }
+    
+    public Provider searchProvider(String code) {
+        for(int i = 0; i < list.size(); i++) {
+            if(list.get(i).getCnpj().equals(code)) return list.get(i);
+        }
+        return null;
+    }
+    
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        label1 = new java.awt.Label();
+        ftxtSearch = new javax.swing.JFormattedTextField();
+        btnSearch = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
+        btnDelete = new javax.swing.JButton();
+        btnEdit = new javax.swing.JButton();
+        btnNew = new javax.swing.JButton();
+        BtnCancel = new javax.swing.JButton();
+        btnSave = new javax.swing.JButton();
+        jSeparator2 = new javax.swing.JSeparator();
+        pnlInputs = new javax.swing.JPanel();
+        lblName = new javax.swing.JLabel();
+        txtCompanyName = new javax.swing.JTextField();
+        lblAddress = new javax.swing.JLabel();
+        txtAddress = new javax.swing.JTextField();
+        lblCPF = new javax.swing.JLabel();
+        lblTel = new javax.swing.JLabel();
+        lblEmail = new javax.swing.JLabel();
+        lblPosition = new javax.swing.JLabel();
+        txtResponsibleName = new javax.swing.JTextField();
+        lblContractDate = new javax.swing.JLabel();
+        ftxtCnpj = new javax.swing.JFormattedTextField();
+        ftxtTel = new javax.swing.JFormattedTextField();
+        ftxtEmail = new javax.swing.JFormattedTextField();
+        txtProduct = new javax.swing.JFormattedTextField();
+        lblOutput = new javax.swing.JLabel();
+        scpOutput = new javax.swing.JScrollPane();
+        txtListing = new javax.swing.JTextArea();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMaximumSize(null);
+        setMinimumSize(new java.awt.Dimension(674, 538));
+        setPreferredSize(new java.awt.Dimension(674, 538));
+
+        label1.setAlignment(java.awt.Label.CENTER);
+        label1.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
+        label1.setText("Cadastro de Fornecedor");
+
+        btnSearch.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\ERE_LPS_TAREFA1_RAYANNE\\CRUD\\src\\main\\java\\images\\search.png")); // NOI18N
+        btnSearch.setIconTextGap(0);
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+
+        btnDelete.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnDelete.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\ERE_LPS_TAREFA1_RAYANNE\\CRUD\\src\\main\\java\\images\\delete.png")); // NOI18N
+        btnDelete.setText("Excluir");
+        btnDelete.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDelete.setMaximumSize(new java.awt.Dimension(89, 33));
+        btnDelete.setMinimumSize(new java.awt.Dimension(89, 33));
+        btnDelete.setPreferredSize(new java.awt.Dimension(89, 33));
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+
+        btnEdit.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnEdit.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\ERE_LPS_TAREFA1_RAYANNE\\CRUD\\src\\main\\java\\images\\edit.png")); // NOI18N
+        btnEdit.setText("Editar");
+        btnEdit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnEdit.setMaximumSize(new java.awt.Dimension(89, 33));
+        btnEdit.setMinimumSize(new java.awt.Dimension(89, 33));
+        btnEdit.setPreferredSize(new java.awt.Dimension(89, 33));
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditActionPerformed(evt);
+            }
+        });
+
+        btnNew.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnNew.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\ERE_LPS_TAREFA1_RAYANNE\\CRUD\\src\\main\\java\\images\\add.png")); // NOI18N
+        btnNew.setText("Novo");
+        btnNew.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnNew.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNewActionPerformed(evt);
+            }
+        });
+
+        BtnCancel.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        BtnCancel.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\ERE_LPS_TAREFA1_RAYANNE\\CRUD\\src\\main\\java\\images\\cancel.png")); // NOI18N
+        BtnCancel.setText("Cancelar");
+        BtnCancel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        BtnCancel.setMaximumSize(new java.awt.Dimension(89, 33));
+        BtnCancel.setMinimumSize(new java.awt.Dimension(89, 33));
+        BtnCancel.setPreferredSize(new java.awt.Dimension(89, 33));
+        BtnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnCancelActionPerformed(evt);
+            }
+        });
+
+        btnSave.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnSave.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\ERE_LPS_TAREFA1_RAYANNE\\CRUD\\src\\main\\java\\images\\save.png")); // NOI18N
+        btnSave.setText("Salvar");
+        btnSave.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSave.setMaximumSize(new java.awt.Dimension(89, 33));
+        btnSave.setMinimumSize(new java.awt.Dimension(89, 33));
+        btnSave.setPreferredSize(new java.awt.Dimension(89, 33));
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
+
+        pnlInputs.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 204, 204)));
+
+        lblName.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblName.setText("Nome da Empresa:");
+
+        lblAddress.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblAddress.setText("Endereço Completo:");
+
+        lblCPF.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblCPF.setText("CNPJ:");
+
+        lblTel.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblTel.setText("Telefone / Whatsapp:");
+
+        lblEmail.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblEmail.setText("E-mail:");
+
+        lblPosition.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblPosition.setText("Nome do Responsável:");
+
+        lblContractDate.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblContractDate.setText("Tipo de Produto:");
+
+        javax.swing.GroupLayout pnlInputsLayout = new javax.swing.GroupLayout(pnlInputs);
+        pnlInputs.setLayout(pnlInputsLayout);
+        pnlInputsLayout.setHorizontalGroup(
+            pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlInputsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlInputsLayout.createSequentialGroup()
+                        .addComponent(txtAddress)
+                        .addGap(18, 18, 18)
+                        .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblEmail)
+                            .addComponent(ftxtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(pnlInputsLayout.createSequentialGroup()
+                        .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtCompanyName, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblName))
+                        .addGap(14, 14, 14)
+                        .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblCPF)
+                            .addComponent(ftxtCnpj, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(ftxtTel)
+                            .addGroup(pnlInputsLayout.createSequentialGroup()
+                                .addComponent(lblTel)
+                                .addGap(0, 60, Short.MAX_VALUE))))
+                    .addGroup(pnlInputsLayout.createSequentialGroup()
+                        .addComponent(lblPosition)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblContractDate)
+                        .addGap(163, 163, 163))
+                    .addGroup(pnlInputsLayout.createSequentialGroup()
+                        .addComponent(lblAddress)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(pnlInputsLayout.createSequentialGroup()
+                        .addComponent(txtResponsibleName, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtProduct)))
+                .addContainerGap())
+        );
+        pnlInputsLayout.setVerticalGroup(
+            pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlInputsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblName)
+                    .addComponent(lblCPF)
+                    .addComponent(lblTel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtCompanyName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ftxtCnpj, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ftxtTel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(pnlInputsLayout.createSequentialGroup()
+                        .addComponent(lblAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ftxtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(pnlInputsLayout.createSequentialGroup()
+                        .addComponent(lblEmail)
+                        .addGap(26, 26, 26)))
+                .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblPosition)
+                    .addComponent(lblContractDate))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtResponsibleName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtProduct, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(20, Short.MAX_VALUE))
+        );
+
+        lblOutput.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblOutput.setText("Output:");
+
+        txtListing.setColumns(20);
+        txtListing.setRows(5);
+        txtListing.setDisabledTextColor(new java.awt.Color(51, 102, 255));
+        scpOutput.setViewportView(txtListing);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(ftxtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(15, 15, 15))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jSeparator2, javax.swing.GroupLayout.DEFAULT_SIZE, 654, Short.MAX_VALUE)
+                                .addComponent(jSeparator1))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnNew, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(BtnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(scpOutput, javax.swing.GroupLayout.PREFERRED_SIZE, 627, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblOutput)))
+                            .addComponent(pnlInputs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnSearch)
+                            .addComponent(ftxtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(BtnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnNew)
+                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pnlInputs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lblOutput)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(scpOutput, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        String chosenCpf = ftxtSearch.getText();
+        Provider p = this.searchProvider(chosenCpf);
+
+        if(chosenCpf.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "O CNPJ não foi informado!");
+            txtListing.setText(this.printProviderList());
+        }
+        else if(p == null) {
+            JOptionPane.showMessageDialog(this, "Não existe fornecedor para o CNPJ informado!");
+            txtListing.setText(this.printProviderList());
+        } else {
+            ftxtSearch.setText("");
+            txtListing.setText("******** Resultado da Pesquisa *********\n"
+                + p.printProviderToString()
+                + "******** Lista de Fornecedores*********\n"
+                + this.printProviderList());
+        }
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        String chosenCode = JOptionPane.showInputDialog("Informe o CNPJ do fornecedor que deseja excluir", "");
+
+        Provider p = this.searchProvider(chosenCode);
+
+        if(p == null) {
+            JOptionPane.showMessageDialog(this, "Não foi encontrado um fornecedor para o CNPJ informado.");
+        } else {
+            int i = JOptionPane.showConfirmDialog(this, "O fornecedor foi encontrado. Deseja realmente excluir?");
+            if(i == JOptionPane.YES_OPTION) {
+                list.remove(p);
+                JOptionPane.showMessageDialog(this, "O fornecedor foi excluído com sucesso.");
+            }else {
+                JOptionPane.showMessageDialog(this, "Exclusão cancelada.");
+            }
+        }
+        txtListing.setText(this.printProviderList());
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+        String chosenCode = JOptionPane.showInputDialog("Informe o CNPJ do fornecedor que deseja editar", "");
+
+        this.providerEditing = this.searchProvider(chosenCode);
+
+        if(providerEditing == null) {
+            JOptionPane.showMessageDialog(this, "Não foi encontrado um fornecedor para o CNPJ informado.");
+        } else {
+            this.clearFields();
+            this.enableFields(true);
+            this.objectToFields(providerEditing);
+            txtCompanyName.requestFocus();
+        }
+    }//GEN-LAST:event_btnEditActionPerformed
+
+    private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
+        this.enableFields(true);
+        this.clearFields();
+        txtCompanyName.requestFocus();
+    }//GEN-LAST:event_btnNewActionPerformed
+
+    private void BtnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCancelActionPerformed
+        this.clearFields();
+        this.enableFields(false);
+    }//GEN-LAST:event_BtnCancelActionPerformed
+
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+
+        if( !txtCompanyName.getText().equals("") &&
+            !ftxtCnpj.getText().equals("") &&
+            !ftxtTel.getText().equals("") &&
+            !ftxtEmail.getText().equals("") &&
+            !txtAddress.getText().equals("") &&
+            !txtResponsibleName.getText().equals("") &&
+            !txtProduct.getText().equals("") &&
+            !txtResponsibleName.getText().equals("")
+        ){
+            if(!verifyCNPJ(ftxtCnpj.getText())) {
+                JOptionPane.showMessageDialog(this, "CNPJ incorreto.");
+                ftxtCnpj.setText("");
+                ftxtCnpj.requestFocus();
+                return;
+            }
+            if(this.providerEditing == null) { // inserindo novo funcionário
+                this.fieldsToObject();
+            } else { // salvando um funcionário que foi alterado
+                this.list.remove(this.providerEditing);
+                this.fieldsToObject();
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Preencha todos os campos!");
+            return;
+        }
+
+        this.clearFields();
+        this.enableFields(false);
+
+        JOptionPane.showMessageDialog(this, "O fornecedor foi salvo com sucesso.");
+        txtListing.setText(this.printProviderList());
+    }//GEN-LAST:event_btnSaveActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(ProviderForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(ProviderForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(ProviderForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(ProviderForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new ProviderForm().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BtnCancel;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnEdit;
+    private javax.swing.JButton btnNew;
+    private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnSearch;
+    private javax.swing.JFormattedTextField ftxtCnpj;
+    private javax.swing.JFormattedTextField ftxtEmail;
+    private javax.swing.JFormattedTextField ftxtSearch;
+    private javax.swing.JFormattedTextField ftxtTel;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
+    private java.awt.Label label1;
+    private javax.swing.JLabel lblAddress;
+    private javax.swing.JLabel lblCPF;
+    private javax.swing.JLabel lblContractDate;
+    private javax.swing.JLabel lblEmail;
+    private javax.swing.JLabel lblName;
+    private javax.swing.JLabel lblOutput;
+    private javax.swing.JLabel lblPosition;
+    private javax.swing.JLabel lblTel;
+    private javax.swing.JPanel pnlInputs;
+    private javax.swing.JScrollPane scpOutput;
+    private javax.swing.JTextField txtAddress;
+    private javax.swing.JTextField txtCompanyName;
+    private javax.swing.JTextArea txtListing;
+    private javax.swing.JFormattedTextField txtProduct;
+    private javax.swing.JTextField txtResponsibleName;
+    // End of variables declaration//GEN-END:variables
+}
