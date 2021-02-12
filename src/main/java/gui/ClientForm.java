@@ -23,7 +23,6 @@ public class ClientForm extends javax.swing.JFrame {
             MaskFormatter maskTel = new MaskFormatter("(##) #####-####");
             MaskFormatter maskCpf = new MaskFormatter("###.###.###-##");
             MaskFormatter maskCpf2 = new MaskFormatter("###.###.###-##");
-            MaskFormatter maskEmail = new MaskFormatter("#######");
             
             maskTel.install(ftxtTel);
             maskCpf.install(ftxtCpf);

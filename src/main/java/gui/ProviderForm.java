@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gui;
 
 import classes.Provider;
@@ -14,10 +9,6 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.text.MaskFormatter;
 
-/**
- *
- * @author Rayanne
- */
 public class ProviderForm extends javax.swing.JFrame {
 
     List<Provider> list;
@@ -29,10 +20,9 @@ public class ProviderForm extends javax.swing.JFrame {
         
         initComponents();
         try {
-            MaskFormatter maskTel = new MaskFormatter("(##) #####-####");
+            MaskFormatter maskTel = new MaskFormatter("(##)#####-####");
             MaskFormatter maskCnpj = new MaskFormatter("##.###.###/####-##");
             MaskFormatter maskCnpj2 = new MaskFormatter("##.###.###/####-##");
-            MaskFormatter maskEmail = new MaskFormatter("##/##/####");
             
             maskTel.install(ftxtTel);
             maskCnpj.install(ftxtCnpj);
@@ -106,6 +96,52 @@ public class ProviderForm extends javax.swing.JFrame {
         return null;
     }
     
+    public boolean validateFields() {
+        if(!txtCompanyName.getText().replace(" ", "").matches("[A-Za-z]{3,}")){
+            JOptionPane.showMessageDialog(this, "Preencha o nome da empresa corretamente. (Obs.: sem acento e somente letras)");
+            txtCompanyName.requestFocus();
+            return false;
+        }
+        if(ftxtCnpj.getText().replace(" ", "").length() < 18){
+            JOptionPane.showMessageDialog(this, "Preencha o CNPJ corretamente.");
+            ftxtCnpj.requestFocus();
+            return false;
+        } else {
+            if(!verifyCNPJ(ftxtCnpj.getText())) {
+                JOptionPane.showMessageDialog(this, "CNPJ inválido.");
+                ftxtCnpj.setText("");
+                ftxtCnpj.requestFocus();
+                return false;
+            }
+        }
+        if(ftxtTel.getText().replace(" ", "").length() < 13){
+            JOptionPane.showMessageDialog(this, "Preencha o telefone corretamente.");
+            ftxtTel.requestFocus();
+            return false;
+        }
+        if(txtAddress.getText().replace(" ", "").length() < 20){
+            JOptionPane.showMessageDialog(this, "Preencha o endereço corretamente. Ex.: Rua Exemplo, 24, Centro - Cidade/Estado");
+            txtAddress.requestFocus();
+            return false;
+        }
+        if(!ftxtEmail.getText().replace(" ", "").matches("([a-z]){1,}([a-z0-9._-]){1,}([@]){1}([a-z]){2,}([.]){1}([a-z]){2,}([.]?){1}([a-z]?){2,}")){
+            JOptionPane.showMessageDialog(this, "Preencha o email corretamente. (Ex.: exemplo@gmail.com)");
+            ftxtEmail.requestFocus();
+            return false;
+        }
+        if(!txtResponsibleName.getText().replace(" ", "").matches("[A-Za-z]{3,}")){
+            JOptionPane.showMessageDialog(this, "Preencha o nome do responsável corretamente. (Obs.: sem acento e somente letras)");
+            txtResponsibleName.requestFocus();
+            return false;
+        }
+        if(txtProduct.getText().replace(" ", "").length() < 5){
+            JOptionPane.showMessageDialog(this, "Preencha o tipo de produto corretamente.");
+            txtProduct.requestFocus();
+            return false;
+        }
+        return true;
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -141,8 +177,7 @@ public class ProviderForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(null);
-        setMinimumSize(new java.awt.Dimension(674, 538));
-        setPreferredSize(new java.awt.Dimension(674, 538));
+        setMinimumSize(new java.awt.Dimension(674, 527));
 
         label1.setAlignment(java.awt.Label.CENTER);
         label1.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
@@ -269,17 +304,18 @@ public class ProviderForm extends javax.swing.JFrame {
                                 .addComponent(lblTel)
                                 .addGap(0, 60, Short.MAX_VALUE))))
                     .addGroup(pnlInputsLayout.createSequentialGroup()
-                        .addComponent(lblPosition)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblContractDate)
-                        .addGap(163, 163, 163))
-                    .addGroup(pnlInputsLayout.createSequentialGroup()
                         .addComponent(lblAddress)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(pnlInputsLayout.createSequentialGroup()
-                        .addComponent(txtResponsibleName, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtResponsibleName, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblPosition))
                         .addGap(18, 18, 18)
-                        .addComponent(txtProduct)))
+                        .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlInputsLayout.createSequentialGroup()
+                                .addComponent(lblContractDate)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(txtProduct))))
                 .addContainerGap())
         );
         pnlInputsLayout.setVerticalGroup(
@@ -306,6 +342,7 @@ public class ProviderForm extends javax.swing.JFrame {
                     .addGroup(pnlInputsLayout.createSequentialGroup()
                         .addComponent(lblEmail)
                         .addGap(26, 26, 26)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
                 .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblPosition)
                     .addComponent(lblContractDate))
@@ -313,7 +350,7 @@ public class ProviderForm extends javax.swing.JFrame {
                 .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtResponsibleName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtProduct, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         lblOutput.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -406,6 +443,11 @@ public class ProviderForm extends javax.swing.JFrame {
         if(chosenCpf.isEmpty()) {
             JOptionPane.showMessageDialog(this, "O CNPJ não foi informado!");
             txtListing.setText(this.printProviderList());
+            ftxtCnpj.requestFocus();
+        }
+        else if(ftxtCnpj.getText().replace(" ", "").length() < 18){
+            JOptionPane.showMessageDialog(this, "Preencha o CNPJ corretamente.");
+            ftxtCnpj.requestFocus();
         }
         else if(p == null) {
             JOptionPane.showMessageDialog(this, "Não existe fornecedor para o CNPJ informado!");
@@ -466,37 +508,21 @@ public class ProviderForm extends javax.swing.JFrame {
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
 
-        if( !txtCompanyName.getText().equals("") &&
-            !ftxtCnpj.getText().equals("") &&
-            !ftxtTel.getText().equals("") &&
-            !ftxtEmail.getText().equals("") &&
-            !txtAddress.getText().equals("") &&
-            !txtResponsibleName.getText().equals("") &&
-            !txtProduct.getText().equals("") &&
-            !txtResponsibleName.getText().equals("")
-        ){
-            if(!verifyCNPJ(ftxtCnpj.getText())) {
-                JOptionPane.showMessageDialog(this, "CNPJ incorreto.");
-                ftxtCnpj.setText("");
-                ftxtCnpj.requestFocus();
-                return;
-            }
+        if(validateFields()) {
             if(this.providerEditing == null) { // inserindo novo funcionário
                 this.fieldsToObject();
             } else { // salvando um funcionário que foi alterado
                 this.list.remove(this.providerEditing);
                 this.fieldsToObject();
             }
-        } else {
-            JOptionPane.showMessageDialog(this, "Preencha todos os campos!");
-            return;
+            this.clearFields();
+            this.enableFields(false);
+
+            JOptionPane.showMessageDialog(this, "O fornecedor foi salvo com sucesso.");
+            txtListing.setText(this.printProviderList());
         }
 
-        this.clearFields();
-        this.enableFields(false);
-
-        JOptionPane.showMessageDialog(this, "O fornecedor foi salvo com sucesso.");
-        txtListing.setText(this.printProviderList());
+        
     }//GEN-LAST:event_btnSaveActionPerformed
 
     /**

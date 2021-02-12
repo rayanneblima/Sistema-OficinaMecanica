@@ -30,7 +30,6 @@ public class EmployeeForm extends javax.swing.JFrame {
             MaskFormatter maskCpf = new MaskFormatter("###.###.###-##");
             MaskFormatter maskCpf2 = new MaskFormatter("###.###.###-##");
             MaskFormatter maskMoney = new MaskFormatter("R$ #.###,##");
-            MaskFormatter maskEmail = new MaskFormatter("##/##/####");
             
             maskDate.install(ftxtContractDate);
             maskTel.install(ftxtTel);

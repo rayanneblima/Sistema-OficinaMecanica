@@ -20,11 +20,11 @@ public class ProjetoCRUD {
         //ClientForm tela2 = new ClientForm();
         //tela2.setVisible(true);
         
-        EmployeeForm tela3 = new EmployeeForm();
-        tela3.setVisible(true);
+        //EmployeeForm tela3 = new EmployeeForm();
+        //tela3.setVisible(true);
         
-       // ProviderForm tela4 = new ProviderForm();
-        //tela4.setVisible(true);
+        ProviderForm tela4 = new ProviderForm();
+        tela4.setVisible(true);
     }
     
 }
