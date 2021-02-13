@@ -12,8 +12,8 @@ import javax.swing.text.MaskFormatter;
 
 public class EmployeeForm extends javax.swing.JFrame {
 
-    List<Employee> list;
-    Employee employeeEditing;
+    private List<Employee> list;
+    private Employee employeeEditing;
 
     public EmployeeForm() {
         this.list = new ArrayList<>();
@@ -198,7 +198,7 @@ public class EmployeeForm extends javax.swing.JFrame {
             txtWorkHours.requestFocus();
             return false;
         }
-        if(ftxtSalary.getText().replace(" ", "").length() < 6){
+        if(ftxtSalary.getText().replace(" ", "").matches("((R\\$)?)(([1-9]\\d{0,2}(\\.\\d{3})*)|(([1-9]\\.\\d*)?\\d))(\\,\\d\\d)?")){
             JOptionPane.showMessageDialog(this, "Preencha o salário corretamente. (Ex.: R$0.000,00)");
             ftxtSalary.requestFocus();
             return false;

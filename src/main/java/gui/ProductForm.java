@@ -7,8 +7,9 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class ProductForm extends javax.swing.JFrame {
-    List<Product> list;
-    Product productEditing;
+    
+    private List<Product> list;
+    private Product productEditing;
 
     public ProductForm() {
         this.list = new ArrayList<>();
@@ -107,12 +108,12 @@ public class ProductForm extends javax.swing.JFrame {
             txtDescription.requestFocus();
             return false;
         }
-        if(!ftxtCostPrice.getText().replace(" ", "").matches("((R\\$)?[1-9]\\d{0,2}(?:\\.\\d{3})*|0)(?:,\\d{1,2})?")){
+        if(!ftxtCostPrice.getText().replace(" ", "").matches("((R\\$)?)(([1-9]\\d{0,2}(\\.\\d{3})*)|(([1-9]\\.\\d*)?\\d))(\\,\\d\\d)?")){
             JOptionPane.showMessageDialog(this, "Preencha o preço de custo corretamente. (Ex.: R$0.000,00)");
             ftxtCostPrice.requestFocus();
             return false;
         }
-        if(!ftxtSalePrice.getText().replace(" ", "").matches("((R\\$)?[1-9]\\d{0,2}(?:\\.\\d{3})*|0)(?:,\\d{1,2})?")){
+        if(!ftxtSalePrice.getText().replace(" ", "").matches("((R\\$)?)(([1-9]\\d{0,2}(\\.\\d{3})*)|(([1-9]\\.\\d*)?\\d))(\\,\\d\\d)?")){
             JOptionPane.showMessageDialog(this, "Preencha o preço de venda corretamente. (Ex.: R$0.000,00)");
             ftxtSalePrice.requestFocus();
             return false;

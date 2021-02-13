@@ -12,8 +12,8 @@ import javax.swing.text.MaskFormatter;
 
 public class ProviderForm extends javax.swing.JFrame {
 
-    List<Provider> list;
-    Provider providerEditing;
+    private List<Provider> list;
+    private Provider providerEditing;
 
     public ProviderForm() {
         this.list = new ArrayList<>();
