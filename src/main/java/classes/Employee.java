@@ -1,7 +1,11 @@
 package classes;
 
-import java.util.Scanner;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Employee {
     private String name;
@@ -12,8 +16,7 @@ public class Employee {
     private String position;
     private int workHours;
     private String salary;
-    private Date contractDate;  
-    
+    private String contractDate;  
     
     public Employee() {
         this.name = "";
@@ -24,10 +27,11 @@ public class Employee {
         this.position = "";
         this.workHours = 0;
         this.salary = "";
-        //this.contractDate = ;
+        this.contractDate = "";
     }
     
     public void fillEmployee() {
+       
         Scanner scan = new Scanner(System.in);
         System.out.println("******* Preencha o Funcionário *******");
         System.out.print("Informe o nome do funcionário: ");
@@ -47,7 +51,8 @@ public class Employee {
         System.out.print("Informe o salário fixo do funcionário: ");
         this.setSalary(scan.nextLine());
         System.out.print("Informe a data de contratação do funcionário: ");
-        //this.setContractDate(scan.());
+        this.setContractDate(scan.nextLine());
+       
     }
     
     public void printEmployee() {
@@ -207,14 +212,14 @@ public class Employee {
     /**
      * @return the contractDate
      */
-    public Date getContractDate() {
+    public String getContractDate() {
         return contractDate;
     }
 
     /**
      * @param contractDate the contractDate to set
      */
-    public void setContractDate(Date contractDate) {
+    public void setContractDate(String contractDate) {
         this.contractDate = contractDate;
     }
 

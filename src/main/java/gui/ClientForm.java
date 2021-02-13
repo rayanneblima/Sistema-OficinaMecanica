@@ -142,7 +142,7 @@ public class ClientForm extends javax.swing.JFrame {
             return false;
         } else {
             if(!verifyCPF(ftxtCpf.getText())) {
-                JOptionPane.showMessageDialog(this, "CNPJ inválido.");
+                JOptionPane.showMessageDialog(this, "CPF inválido.");
                 ftxtCpf.setText("");
                 ftxtCpf.requestFocus();
                 return false;
@@ -457,7 +457,8 @@ public class ClientForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-       String chosenCpf = ftxtSearch.getText();
+        String chosenCpf = ftxtSearch.getText();
+        
         Client c = this.searchClient(chosenCpf);
         
         if(chosenCpf.isEmpty()) {
@@ -466,7 +467,7 @@ public class ClientForm extends javax.swing.JFrame {
         }
         else if(ftxtCpf.getText().replace(" ", "").length() < 14){
             JOptionPane.showMessageDialog(this, "Preencha o CPF corretamente.");
-            ftxtCpf.requestFocus();
+            ftxtSearch.requestFocus();
         }
         else if(c == null) {
             JOptionPane.showMessageDialog(this, "Não existe cliente para o CPF informado!");
@@ -487,12 +488,13 @@ public class ClientForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNewActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-        String chosenCode = JOptionPane.showInputDialog("Informe o cpf do cliente que deseja editar", "");
+        String chosenCode = JOptionPane.showInputDialog("Informe o CPF do cliente que deseja editar", "");
+        String maskCpf = chosenCode.substring(0, 3) + "." + chosenCode.substring(3, 6) + "." + chosenCode.substring(6, 9) + "-" + chosenCode.substring(9, 11);
         
-        this.clientEditing = this.searchClient(chosenCode);
+        this.clientEditing = this.searchClient(maskCpf);
         
         if(clientEditing == null) {
-            JOptionPane.showMessageDialog(this, "Não foi encontrado um cliente para o cpf informado.");
+            JOptionPane.showMessageDialog(this, "Não foi encontrado um cliente para o CPF informado.");
         } else {
             this.clearFields();
             this.enableFields(true);
@@ -502,12 +504,13 @@ public class ClientForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        String chosenCode = JOptionPane.showInputDialog("Informe o cpf do cliente que deseja excluir", "");
+        String chosenCode = JOptionPane.showInputDialog("Informe o CPF do cliente que deseja excluir", "");
+        String maskCpf = chosenCode.substring(0, 3) + "." + chosenCode.substring(3, 6) + "." + chosenCode.substring(6, 9) + "-" + chosenCode.substring(9, 11);
         
-        Client c = this.searchClient(chosenCode);
+        Client c = this.searchClient(maskCpf);
         
         if(c == null) {
-            JOptionPane.showMessageDialog(this, "Não foi encontrado um cliente para o cpf informado.");
+            JOptionPane.showMessageDialog(this, "Não foi encontrado um cliente para o CPF informado.");
         } else {
             int i = JOptionPane.showConfirmDialog(this, "O cliente foi encontrado. Deseja realmente excluir?");
             if(i == JOptionPane.YES_OPTION) {

@@ -4,7 +4,6 @@ import classes.Employee;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -25,13 +24,11 @@ public class EmployeeForm extends javax.swing.JFrame {
             MaskFormatter maskTel = new MaskFormatter("(##) #####-####");
             MaskFormatter maskCpf = new MaskFormatter("###.###.###-##");
             MaskFormatter maskCpf2 = new MaskFormatter("###.###.###-##");
-            MaskFormatter maskMoney = new MaskFormatter("R$ #.###,##");
             
             maskDate.install(ftxtContractDate);
             maskTel.install(ftxtTel);
             maskCpf.install(ftxtCpf);
             maskCpf2.install(ftxtSearch);
-            maskMoney.install(ftxtSalary);
         } catch(ParseException ex) {
             Logger.getLogger(EmployeeForm.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -40,7 +37,7 @@ public class EmployeeForm extends javax.swing.JFrame {
         this.clearFields();
         txtListing.setEnabled(false);
     }
-
+    
     public void enableFields(boolean flag) {
         for(int i = 0; i < pnlInputs.getComponents().length; i++){
             pnlInputs.getComponent(i).setEnabled(flag);
@@ -60,20 +57,19 @@ public class EmployeeForm extends javax.swing.JFrame {
     }
     
     public void fieldsToObject() {
-        Employee e = new Employee();
         
+        Employee e = new Employee();
+            
         e.setName(txtName.getText());
         e.setCpf(ftxtCpf.getText());
         e.setTel(ftxtTel.getText());
         e.setEmail(ftxtEmail.getText());
         e.setAddress(txtAddress.getText());
         e.setPosition(txtPosition.getText());
-        int hours = Integer.parseInt(txtWorkHours.getText());
-        e.setWorkHours(hours);
+        e.setWorkHours(Integer.parseInt(txtWorkHours.getText()));
         e.setSalary(ftxtSalary.getText());
-        //Date contract = Date.parseDate(txtContractDate.getText());
-        //e.setContractDate(contract);
-        
+        e.setContractDate(ftxtContractDate.getText());
+            
         list.add(e);
     }
     
@@ -87,8 +83,7 @@ public class EmployeeForm extends javax.swing.JFrame {
         String hours = Integer.toString(e.getWorkHours());
         txtWorkHours.setText(hours);
         ftxtSalary.setText(e.getSalary());
-        //String date = Date.toString(e.getContractDate());
-        //txtContractDate.setText(date);        
+        ftxtContractDate.setText(e.getContractDate());       
     }
     
     public String printEmployeeList() {
@@ -147,6 +142,63 @@ public class EmployeeForm extends javax.swing.JFrame {
             return true;
         }
     }
+    
+    public boolean validateFields() {
+        if(!txtName.getText().replace(" ", "").matches("[A-Za-z]{3,}")){
+            JOptionPane.showMessageDialog(this, "Preencha o nome do funcionário corretamente. (Obs.: sem acento e somente letras)");
+            txtName.requestFocus();
+            return false;
+        }
+        if(ftxtCpf.getText().replace(" ", "").length() < 14){
+            JOptionPane.showMessageDialog(this, "Preencha o CPF corretamente.");
+            ftxtCpf.requestFocus();
+            return false;
+        } else {
+            if(!verifyCPF(ftxtCpf.getText())) {
+                JOptionPane.showMessageDialog(this, "CPF inválido.");
+                ftxtCpf.setText("");
+                ftxtCpf.requestFocus();
+                return false;
+            }
+        }
+        if(ftxtTel.getText().replace(" ", "").length() < 13){
+            JOptionPane.showMessageDialog(this, "Preencha o telefone corretamente.");
+            ftxtTel.requestFocus();
+            return false;
+        }
+        if(txtAddress.getText().replace(" ", "").length() < 20){
+            JOptionPane.showMessageDialog(this, "Preencha o endereço corretamente. Ex.: Rua Exemplo, 24, Centro - Cidade/Estado");
+            txtAddress.requestFocus();
+            return false;
+        }
+        if(!ftxtEmail.getText().replace(" ", "").matches("([a-z]){1,}([a-z0-9._-]){1,}([@]){1}([a-z]){2,}([.]){1}([a-z]){2,}([.]?){1}([a-z]?){2,}")){
+            JOptionPane.showMessageDialog(this, "Preencha o email corretamente. (Ex.: exemplo@gmail.com)");
+            ftxtEmail.requestFocus();
+            return false;
+        }
+        if(!txtPosition.getText().replace(" ", "").matches("[A-Za-z]{5,}")){
+            JOptionPane.showMessageDialog(this, "Preencha o cargo corretamente. (Obs.: sem acento e somente letras)");
+            txtPosition.requestFocus();
+            return false;
+        }
+        if(!txtWorkHours.getText().replace(" ", "").matches("[0-9]{1,}")){
+            JOptionPane.showMessageDialog(this, "Preencha corretamente as horas trabalhadas.");
+            txtWorkHours.requestFocus();
+            return false;
+        }
+        if(ftxtSalary.getText().replace(" ", "").length() < 6){
+            JOptionPane.showMessageDialog(this, "Preencha o salário corretamente. (Ex.: R$0.000,00)");
+            ftxtSalary.requestFocus();
+            return false;
+        }
+        if(!ftxtContractDate.getText().replace(" ", "").matches("[0-9]{2}[\\/]{1}[0-9]{2}[\\/]{1}[0-9]{4}")){
+            JOptionPane.showMessageDialog(this, "Preencha a data de contratação corretamente. (Ex.: 11/11/2000)");
+            ftxtContractDate.requestFocus();
+            return false;
+        }
+        return true;
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -185,6 +237,7 @@ public class EmployeeForm extends javax.swing.JFrame {
         ftxtSearch = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Sistema - Cadastro de Funcionário");
         setMaximumSize(null);
         setMinimumSize(new java.awt.Dimension(674, 553));
 
@@ -361,6 +414,7 @@ public class EmployeeForm extends javax.swing.JFrame {
                     .addGroup(pnlInputsLayout.createSequentialGroup()
                         .addComponent(lblEmail)
                         .addGap(26, 26, 26)))
+                .addGap(18, 18, 18)
                 .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblPosition)
                     .addComponent(lblWorkHours)
@@ -372,7 +426,7 @@ public class EmployeeForm extends javax.swing.JFrame {
                     .addComponent(txtPosition, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(ftxtSalary, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(ftxtContractDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(97, 97, 97))
+                .addGap(79, 79, 79))
         );
 
         lblOutput.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -387,37 +441,39 @@ public class EmployeeForm extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSeparator2)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(pnlInputs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(btnNew, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(BtnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(scpOutput, javax.swing.GroupLayout.PREFERRED_SIZE, 627, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lblOutput))))
-                        .addGap(0, 10, Short.MAX_VALUE)))
-                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(ftxtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(29, 29, 29))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(scpOutput, javax.swing.GroupLayout.PREFERRED_SIZE, 627, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblOutput))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jSeparator2)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(pnlInputs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(btnNew, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(BtnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 10, Short.MAX_VALUE)))
+                        .addContainerGap())))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(5, 5, 5)
@@ -446,12 +502,12 @@ public class EmployeeForm extends javax.swing.JFrame {
                 .addGap(10, 10, 10)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlInputs, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnlInputs, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblOutput)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(scpOutput, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(14, 14, 14)
@@ -466,11 +522,16 @@ public class EmployeeForm extends javax.swing.JFrame {
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         String chosenCpf = ftxtSearch.getText();
+        
         Employee e = this.searchEmployee(chosenCpf);
 
         if(chosenCpf.isEmpty()) {
             JOptionPane.showMessageDialog(this, "O CPF não foi informado!");
             txtListing.setText(this.printEmployeeList());
+        }
+        else if(ftxtCpf.getText().replace(" ", "").length() < 14){
+            JOptionPane.showMessageDialog(this, "Preencha o CPF corretamente.");
+            ftxtSearch.requestFocus();
         }
         else if(e == null) {
             JOptionPane.showMessageDialog(this, "Não existe funcionário para o CPF informado!");
@@ -487,16 +548,18 @@ public class EmployeeForm extends javax.swing.JFrame {
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
         this.enableFields(true);
         this.clearFields();
+        ftxtSalary.setText("R$");
         txtName.requestFocus();
     }//GEN-LAST:event_btnNewActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-        String chosenCode = JOptionPane.showInputDialog("Informe o cpf do funcionário que deseja editar", "");
+        String chosenCode = JOptionPane.showInputDialog("Informe o CPF do funcionário que deseja editar:", "");
+        String maskCpf = chosenCode.substring(0, 3) + "." + chosenCode.substring(3, 6) + "." + chosenCode.substring(6, 9) + "-" + chosenCode.substring(9, 11);
 
-        this.employeeEditing = this.searchEmployee(chosenCode);
+        this.employeeEditing = this.searchEmployee(maskCpf);
 
         if(employeeEditing == null) {
-            JOptionPane.showMessageDialog(this, "Não foi encontrado um funcionário para o cpf informado.");
+            JOptionPane.showMessageDialog(this, "Não foi encontrado um funcionário para o CPF informado.");
         } else {
             this.clearFields();
             this.enableFields(true);
@@ -506,12 +569,13 @@ public class EmployeeForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        String chosenCode = JOptionPane.showInputDialog("Informe o cpf do funcionário que deseja excluir", "");
+        String chosenCode = JOptionPane.showInputDialog("Informe o CPF do funcionário que deseja excluir:", "");
+        String maskCpf = chosenCode.substring(0, 3) + "." + chosenCode.substring(3, 6) + "." + chosenCode.substring(6, 9) + "-" + chosenCode.substring(9, 11);
 
-        Employee e = this.searchEmployee(chosenCode);
+        Employee e = this.searchEmployee(maskCpf);
 
         if(e == null) {
-            JOptionPane.showMessageDialog(this, "Não foi encontrado um funcionário para o cpf informado.");
+            JOptionPane.showMessageDialog(this, "Não foi encontrado um funcionário para o CPF informado.");
         } else {
             int i = JOptionPane.showConfirmDialog(this, "O funcionário foi encontrado. Deseja realmente excluir?");
             if(i == JOptionPane.YES_OPTION) {
@@ -534,38 +598,21 @@ public class EmployeeForm extends javax.swing.JFrame {
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
                
-        if( !txtName.getText().equals("") &&
-            !ftxtCpf.getText().equals("") &&
-            !ftxtTel.getText().equals("") &&
-            !ftxtEmail.getText().equals("") &&
-            !txtAddress.getText().equals("") &&
-            !txtPosition.getText().equals("") &&
-            !txtWorkHours.getText().equals("") &&
-            !ftxtSalary.getText().equals("") &&
-            !ftxtContractDate.getText().equals("")
-        ){
-          if(!verifyCPF(ftxtCpf.getText())) {
-            JOptionPane.showMessageDialog(this, "CPF incorreto.");
-            ftxtCpf.setText("");
-            ftxtCpf.requestFocus();
-            return;
-          }
-          if(this.employeeEditing == null) { // inserindo novo funcionário
-            this.fieldsToObject();
-          } else { // salvando um funcionário que foi alterado
-            this.list.remove(this.employeeEditing);
-            this.fieldsToObject();
-          }
-        } else {
-            JOptionPane.showMessageDialog(this, "Preencha todos os campos!");
-            return;
+        if(validateFields()){
+            if(this.employeeEditing == null) { // inserindo novo funcionário
+                this.fieldsToObject();
+            } else { // salvando um funcionário que foi alterado
+                this.list.remove(this.employeeEditing);
+                this.fieldsToObject();
+            }
+
+            this.clearFields();
+            this.enableFields(false);
+
+            JOptionPane.showMessageDialog(this, "O funcionário foi salvo com sucesso.");
+            txtListing.setText(this.printEmployeeList());
         }
 
-        this.clearFields();
-        this.enableFields(false);
-
-        JOptionPane.showMessageDialog(this, "O funcionário foi salvo com sucesso.");
-        txtListing.setText(this.printEmployeeList());
     }//GEN-LAST:event_btnSaveActionPerformed
 
     /**
