@@ -1,13 +1,9 @@
 package gui;
 
 import classes.Product;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.text.MaskFormatter;
 
 public class ProductForm extends javax.swing.JFrame {
     List<Product> list;
@@ -18,16 +14,7 @@ public class ProductForm extends javax.swing.JFrame {
         this.productEditing = null;
         
         initComponents();
-         try {
-            MaskFormatter maskMoney = new MaskFormatter("R$ ######,##");
-            MaskFormatter maskMoney2 = new MaskFormatter("R$ ######,##");
-            
-            maskMoney.install(ftxtCostPrice);
-            maskMoney2.install(ftxtSalePrice);
-        } catch(ParseException ex) {
-            Logger.getLogger(EmployeeForm.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+                
         this.enableFields(false);
         this.clearFields();
         txtListing.setEnabled(false);
@@ -86,7 +73,41 @@ public class ProductForm extends javax.swing.JFrame {
         }
         return null;
     }
-
+    
+    public boolean validateFields() {
+        if(!txtName.getText().replace(" ", "").matches("[A-Za-z]{3,}")){
+            JOptionPane.showMessageDialog(this, "Preencha o nome do produto corretamente. (Obs.: sem acento e somente letras)");
+            txtName.requestFocus();
+            return false;
+        }
+        if(txtQuantity.getText().replace(" ", "").length() < 1){
+            JOptionPane.showMessageDialog(this, "Preencha a quantidade corretamente.");
+            txtQuantity.requestFocus();
+            return false;
+        }
+        if(txtCode.getText().replace(" ", "").length() < 3){
+            JOptionPane.showMessageDialog(this, "Preencha o código corretamente. (Obs.: no mínimo 4 dígitos)");
+            txtCode.requestFocus();
+            return false;
+        }
+        if(txtDescription.getText().replace(" ", "").length() < 10){
+            JOptionPane.showMessageDialog(this, "Preencha a descricão do produto corretamente.");
+            txtDescription.requestFocus();
+            return false;
+        }
+        if(!ftxtCostPrice.getText().replace(" ", "").matches("((R\\$)?[1-9]\\d{0,2}(?:\\.\\d{3})*|0)(?:,\\d{1,2})?")){
+            JOptionPane.showMessageDialog(this, "Preencha o preço de custo corretamente. (Ex.: R$0.000,00)");
+            ftxtCostPrice.requestFocus();
+            return false;
+        }
+        if(!ftxtSalePrice.getText().replace(" ", "").matches("((R\\$)?[1-9]\\d{0,2}(?:\\.\\d{3})*|0)(?:,\\d{1,2})?")){
+            JOptionPane.showMessageDialog(this, "Preencha o preço de venda corretamente. (Ex.: R$0.000,00)");
+            ftxtSalePrice.requestFocus();
+            return false;
+        }
+        return true;
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -407,6 +428,10 @@ public class ProductForm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Código do produto não foi informado!");
             txtListing.setText(this.printProductList());
         }
+        else if(txtSearch.getText().replace(" ", "").length() < 3){
+            JOptionPane.showMessageDialog(this, "Preencha o código corretamente. (Obs.: no mínimo 4 dígitos)");
+            txtSearch.requestFocus();
+        }
         else if(p == null) {
             JOptionPane.showMessageDialog(this, "Não existe produto para o código informado!");
             txtListing.setText(this.printProductList());
@@ -422,33 +447,27 @@ public class ProductForm extends javax.swing.JFrame {
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
         this.enableFields(true);
         this.clearFields();
+        ftxtCostPrice.setText("R$");
+        ftxtSalePrice.setText("R$");
         txtName.requestFocus();
     }//GEN-LAST:event_btnNewActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {                                        
-        if( !txtName.getText().equals("") &&
-            !ftxtCostPrice.getText().equals("") &&
-            !ftxtSalePrice.getText().equals("") &&
-            !txtQuantity.getText().equals("") &&
-            !txtCode.getText().equals("") &&
-            !txtDescription.getText().equals("")
-        ){
+        if(validateFields()) {
           if(this.productEditing == null) { // inserindo novo produto
             this.fieldsToObject(); 
           } else { // salvando um produto que foi alterado
             this.list.remove(this.productEditing);
             this.fieldsToObject();       
           }
-        } else {
-            JOptionPane.showMessageDialog(this, "Preencha todos os campos!");
-            return;
-        }
+          this.clearFields();
+          this.enableFields(false);
+
+          JOptionPane.showMessageDialog(this, "O produto foi salvo com sucesso.");
+          txtListing.setText(this.printProductList());
+        } 
         
-        this.clearFields();
-        this.enableFields(false);
-        
-        JOptionPane.showMessageDialog(this, "O produto foi salvo com sucesso.");
-        txtListing.setText(this.printProductList());
+       
     }
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         String chosenCode = JOptionPane.showInputDialog("Informe o código do produto que deseja excluir", "");

@@ -36,11 +36,6 @@ public class ProviderForm extends javax.swing.JFrame {
         txtListing.setEnabled(false);
     }
     
-    public boolean verifyCNPJ(String cpf) {
-        //TODO
-        return true;
-    }
-
     public void enableFields(boolean flag) {
         for(int i = 0; i < pnlInputs.getComponents().length; i++){
             pnlInputs.getComponent(i).setEnabled(flag);
@@ -94,6 +89,11 @@ public class ProviderForm extends javax.swing.JFrame {
             if(list.get(i).getCnpj().equals(code)) return list.get(i);
         }
         return null;
+    }
+    
+    public boolean verifyCNPJ(String cpf) {
+        //TODO
+        return true;
     }
     
     public boolean validateFields() {
