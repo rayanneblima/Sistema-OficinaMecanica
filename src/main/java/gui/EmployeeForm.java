@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 
 public class EmployeeForm extends javax.swing.JFrame {
@@ -35,7 +36,6 @@ public class EmployeeForm extends javax.swing.JFrame {
         
         this.enableFields(false);
         this.clearFields();
-        txtListing.setEnabled(false);
     }
     
     public void enableFields(boolean flag) {
@@ -85,20 +85,32 @@ public class EmployeeForm extends javax.swing.JFrame {
         ftxtSalary.setText(e.getSalary());
         ftxtContractDate.setText(e.getContractDate());       
     }
-    
-    public String printEmployeeList() {
-        String totalList = "";
-        for(int i = 0; i < list.size(); i++) {
-            totalList = totalList + list.get(i).printEmployeeToString();
-        }
-        return totalList;
-    }
-    
+
     public Employee searchEmployee(String code) {
         for(int i = 0; i < list.size(); i++) {
             if(list.get(i).getCpf().equals(code)) return list.get(i);
         }
         return null;
+    }
+    
+    public void printEmployeeList() {
+        String [] column = {"Nome", "CPF", "Telefone/Whatsapp", "Salário"};
+        DefaultTableModel model = new DefaultTableModel(column, 0);
+        
+        for(int i = 0; i < list.size(); i++) {
+            Object [] row = {list.get(i).getName(), list.get(i).getCpf(), list.get(i).getTel(), list.get(i).getSalary()};
+            model.addRow(row);
+        }
+        tblListing.setModel(model);
+    }
+    
+    public void printEmployee(Employee e) {
+        String [] column = {"Nome", "CPF", "Telefone/Whatsapp", "Salário"};
+        DefaultTableModel model = new DefaultTableModel(column, 0);
+        
+        Object [] row = {e.getName(), e.getCpf(), e.getTel(), e.getSalary()};
+        model.addRow(row);
+        tblListing.setModel(model);
     }
     
     public boolean verifyCPF(String cpf) {
@@ -204,6 +216,7 @@ public class EmployeeForm extends javax.swing.JFrame {
     private void initComponents() {
 
         label1 = new java.awt.Label();
+        ftxtSearch = new javax.swing.JFormattedTextField();
         btnSearch = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         btnNew = new javax.swing.JButton();
@@ -232,14 +245,14 @@ public class EmployeeForm extends javax.swing.JFrame {
         ftxtSalary = new javax.swing.JFormattedTextField();
         ftxtContractDate = new javax.swing.JFormattedTextField();
         lblOutput = new javax.swing.JLabel();
-        scpOutput = new javax.swing.JScrollPane();
-        txtListing = new javax.swing.JTextArea();
-        ftxtSearch = new javax.swing.JFormattedTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblListing = new javax.swing.JTable();
+        btnRefresh2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sistema - Cadastro de Funcionário");
         setMaximumSize(null);
-        setMinimumSize(new java.awt.Dimension(674, 553));
+        setMinimumSize(new java.awt.Dimension(674, 499));
 
         label1.setAlignment(java.awt.Label.CENTER);
         label1.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
@@ -414,7 +427,7 @@ public class EmployeeForm extends javax.swing.JFrame {
                     .addGroup(pnlInputsLayout.createSequentialGroup()
                         .addComponent(lblEmail)
                         .addGap(26, 26, 26)))
-                .addGap(18, 18, 18)
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblPosition)
                     .addComponent(lblWorkHours)
@@ -426,16 +439,32 @@ public class EmployeeForm extends javax.swing.JFrame {
                     .addComponent(txtPosition, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(ftxtSalary, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(ftxtContractDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(79, 79, 79))
+                .addGap(61, 61, 61))
         );
 
         lblOutput.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblOutput.setText("Output:");
 
-        txtListing.setColumns(20);
-        txtListing.setRows(5);
-        txtListing.setDisabledTextColor(new java.awt.Color(51, 102, 255));
-        scpOutput.setViewportView(txtListing);
+        tblListing.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane1.setViewportView(tblListing);
+
+        btnRefresh2.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\ERE_LPS_TAREFA1_RAYANNE\\CRUD\\src\\main\\java\\images\\refresh.png")); // NOI18N
+        btnRefresh2.setIconTextGap(0);
+        btnRefresh2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefresh2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -450,30 +479,30 @@ public class EmployeeForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator2)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(scpOutput, javax.swing.GroupLayout.PREFERRED_SIZE, 627, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblOutput))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jSeparator2)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(pnlInputs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(pnlInputs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnNew, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(BtnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(btnNew, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(BtnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 10, Short.MAX_VALUE)))
-                        .addContainerGap())))
+                                        .addComponent(lblOutput)
+                                        .addGap(557, 557, 557)
+                                        .addComponent(btnRefresh2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 624, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 10, Short.MAX_VALUE)))
+                .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(5, 5, 5)
@@ -490,8 +519,8 @@ public class EmployeeForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnSearch)
-                    .addComponent(ftxtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(ftxtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSearch))
                 .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnNew)
@@ -503,18 +532,23 @@ public class EmployeeForm extends javax.swing.JFrame {
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnlInputs, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lblOutput)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addComponent(lblOutput))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnRefresh2)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(scpOutput, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(24, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(14, 14, 14)
                     .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(474, Short.MAX_VALUE)))
+                    .addContainerGap(420, Short.MAX_VALUE)))
         );
 
         pack();
@@ -527,21 +561,18 @@ public class EmployeeForm extends javax.swing.JFrame {
 
         if(chosenCpf.isEmpty()) {
             JOptionPane.showMessageDialog(this, "O CPF não foi informado!");
-            txtListing.setText(this.printEmployeeList());
+            printEmployeeList();
         }
-        else if(ftxtCpf.getText().replace(" ", "").length() < 14){
+        else if(ftxtSearch.getText().replace(" ", "").length() < 14){
             JOptionPane.showMessageDialog(this, "Preencha o CPF corretamente.");
             ftxtSearch.requestFocus();
         }
         else if(e == null) {
             JOptionPane.showMessageDialog(this, "Não existe funcionário para o CPF informado!");
-            txtListing.setText(this.printEmployeeList());
+            printEmployeeList();
         } else {
             ftxtSearch.setText("");
-            txtListing.setText("******** Resultado da Pesquisa *********\n"
-                + e.printEmployeeToString()
-                + "******** Lista de Funcionários*********\n"
-                + this.printEmployeeList());
+            printEmployee(e);
         }
     }//GEN-LAST:event_btnSearchActionPerformed
 
@@ -577,23 +608,25 @@ public class EmployeeForm extends javax.swing.JFrame {
         if(e == null) {
             JOptionPane.showMessageDialog(this, "Não foi encontrado um funcionário para o CPF informado.");
         } else {
-            int i = JOptionPane.showConfirmDialog(this, "O funcionário foi encontrado. Deseja realmente excluir?");
-            if(i == JOptionPane.YES_OPTION) {
+            Object[] options = { "Sim", "Não", "Cancelar" };
+            int i = JOptionPane.showOptionDialog(this, "O funcionário foi encontrado.", "Deseja realmente excluir?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+            if(i == 0) {
                 list.remove(e);
                 JOptionPane.showMessageDialog(this, "O funcionário foi excluído com sucesso.");
             }else {
                 JOptionPane.showMessageDialog(this, "Exclusão cancelada.");
             }
         }
-        txtListing.setText(this.printEmployeeList());
+        printEmployeeList();
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void BtnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCancelActionPerformed
-        int i = JOptionPane.showConfirmDialog(this, "Ao cancelar, todas as informações digitadas serão perdidas. Deseja realmente cancelar?");
-        if(i == JOptionPane.YES_OPTION) {
+        Object[] options = { "Sim", "Não" };
+        int i = JOptionPane.showOptionDialog(this, "Ao cancelar, todas as informações digitadas serão perdidas", "Deseja realmente cancelar?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+        if(i == 0) {
             this.clearFields();
             this.enableFields(false);
-        } 
+        }       
     }//GEN-LAST:event_BtnCancelActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
@@ -610,51 +643,21 @@ public class EmployeeForm extends javax.swing.JFrame {
             this.enableFields(false);
 
             JOptionPane.showMessageDialog(this, "O funcionário foi salvo com sucesso.");
-            txtListing.setText(this.printEmployeeList());
+            printEmployeeList();
         }
 
     }//GEN-LAST:event_btnSaveActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(EmployeeForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(EmployeeForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(EmployeeForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(EmployeeForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new EmployeeForm().setVisible(true);
-            }
-        });
-    }
+    private void btnRefresh2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefresh2ActionPerformed
+        printEmployeeList();
+    }//GEN-LAST:event_btnRefresh2ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnCancel;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnNew;
+    private javax.swing.JButton btnRefresh2;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSearch;
     private javax.swing.JFormattedTextField ftxtContractDate;
@@ -663,6 +666,7 @@ public class EmployeeForm extends javax.swing.JFrame {
     private javax.swing.JFormattedTextField ftxtSalary;
     private javax.swing.JFormattedTextField ftxtSearch;
     private javax.swing.JFormattedTextField ftxtTel;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private java.awt.Label label1;
@@ -677,9 +681,8 @@ public class EmployeeForm extends javax.swing.JFrame {
     private javax.swing.JLabel lblTel;
     private javax.swing.JLabel lblWorkHours;
     private javax.swing.JPanel pnlInputs;
-    private javax.swing.JScrollPane scpOutput;
+    private javax.swing.JTable tblListing;
     private javax.swing.JTextField txtAddress;
-    private javax.swing.JTextArea txtListing;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtPosition;
     private javax.swing.JTextField txtWorkHours;

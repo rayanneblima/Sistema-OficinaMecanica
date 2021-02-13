@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 
 public class ProviderForm extends javax.swing.JFrame {
@@ -33,7 +34,6 @@ public class ProviderForm extends javax.swing.JFrame {
         
         this.enableFields(false);
         this.clearFields();
-        txtListing.setEnabled(false);
     }
     
     public void enableFields(boolean flag) {
@@ -76,19 +76,31 @@ public class ProviderForm extends javax.swing.JFrame {
         txtResponsibleName.setText(p.getResponsibleName());    
     }
     
-    public String printProviderList() {
-        String totalList = "";
-        for(int i = 0; i < list.size(); i++) {
-            totalList = totalList + list.get(i).printProviderToString();
-        }
-        return totalList;
-    }
-    
     public Provider searchProvider(String code) {
         for(int i = 0; i < list.size(); i++) {
             if(list.get(i).getCnpj().equals(code)) return list.get(i);
         }
         return null;
+    }
+    
+    public void printProviderList() {
+        String [] column = {"Empresa", "Responsável", "Telefone/Whatsapp", "Tipo de Produto"};
+        DefaultTableModel model = new DefaultTableModel(column, 0);
+        
+        for(int i = 0; i < list.size(); i++) {
+            Object [] row = {list.get(i).getCompanyName(), list.get(i).getResponsibleName(), list.get(i).getTel(), list.get(i).getProduct()};
+            model.addRow(row);
+        }
+        tblListing.setModel(model);
+    }
+    
+    public void printProvider(Provider p) {
+        String [] column = {"Empresa", "Responsável", "Telefone/Whatsapp", "Tipo de Produto"};
+        DefaultTableModel model = new DefaultTableModel(column, 0);
+        
+        Object [] row = {p.getCompanyName(), p.getResponsibleName(), p.getTel(), p.getProduct()};
+        model.addRow(row);
+        tblListing.setModel(model);
     }
     
     public boolean verifyCNPJ(String cpf) {
@@ -172,12 +184,14 @@ public class ProviderForm extends javax.swing.JFrame {
         ftxtEmail = new javax.swing.JFormattedTextField();
         txtProduct = new javax.swing.JFormattedTextField();
         lblOutput = new javax.swing.JLabel();
-        scpOutput = new javax.swing.JScrollPane();
-        txtListing = new javax.swing.JTextArea();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblListing = new javax.swing.JTable();
+        btnRefresh2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Sistema - Cadastro de Fornecedor");
         setMaximumSize(null);
-        setMinimumSize(new java.awt.Dimension(674, 527));
+        setMinimumSize(new java.awt.Dimension(674, 490));
 
         label1.setAlignment(java.awt.Label.CENTER);
         label1.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
@@ -354,10 +368,26 @@ public class ProviderForm extends javax.swing.JFrame {
         lblOutput.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblOutput.setText("Output:");
 
-        txtListing.setColumns(20);
-        txtListing.setRows(5);
-        txtListing.setDisabledTextColor(new java.awt.Color(51, 102, 255));
-        scpOutput.setViewportView(txtListing);
+        tblListing.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane1.setViewportView(tblListing);
+
+        btnRefresh2.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\ERE_LPS_TAREFA1_RAYANNE\\CRUD\\src\\main\\java\\images\\refresh.png")); // NOI18N
+        btnRefresh2.setIconTextGap(0);
+        btnRefresh2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefresh2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -390,14 +420,17 @@ public class ProviderForm extends javax.swing.JFrame {
                                 .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(scpOutput, javax.swing.GroupLayout.PREFERRED_SIZE, 627, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lblOutput)))
-                            .addComponent(pnlInputs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(pnlInputs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblOutput)
+                        .addGap(557, 557, 557)
+                        .addComponent(btnRefresh2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 624, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -424,11 +457,14 @@ public class ProviderForm extends javax.swing.JFrame {
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnlInputs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lblOutput)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(11, 11, 11)
+                        .addComponent(lblOutput))
+                    .addComponent(btnRefresh2, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(scpOutput, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(50, Short.MAX_VALUE))
         );
 
         pack();
@@ -440,46 +476,44 @@ public class ProviderForm extends javax.swing.JFrame {
 
         if(chosenCpf.isEmpty()) {
             JOptionPane.showMessageDialog(this, "O CNPJ não foi informado!");
-            txtListing.setText(this.printProviderList());
-            ftxtCnpj.requestFocus();
+            printProviderList();
+            ftxtSearch.requestFocus();
         }
-        else if(ftxtCnpj.getText().replace(" ", "").length() < 18){
+        else if(ftxtSearch.getText().replace(" ", "").length() < 18){
             JOptionPane.showMessageDialog(this, "Preencha o CNPJ corretamente.");
-            ftxtCnpj.requestFocus();
+            ftxtSearch.requestFocus();
         }
         else if(p == null) {
             JOptionPane.showMessageDialog(this, "Não existe fornecedor para o CNPJ informado!");
-            txtListing.setText(this.printProviderList());
+            printProviderList();
         } else {
             ftxtSearch.setText("");
-            txtListing.setText("******** Resultado da Pesquisa *********\n"
-                + p.printProviderToString()
-                + "******** Lista de Fornecedores*********\n"
-                + this.printProviderList());
+            printProvider(p);
         }
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        String chosenCode = JOptionPane.showInputDialog("Informe o CNPJ do fornecedor que deseja excluir", "");
+        String chosenCode = JOptionPane.showInputDialog("Informe o CNPJ do fornecedor que deseja excluir:", "");
 
         Provider p = this.searchProvider(chosenCode);
 
         if(p == null) {
             JOptionPane.showMessageDialog(this, "Não foi encontrado um fornecedor para o CNPJ informado.");
         } else {
-            int i = JOptionPane.showConfirmDialog(this, "O fornecedor foi encontrado. Deseja realmente excluir?");
-            if(i == JOptionPane.YES_OPTION) {
+            Object[] options = { "Sim", "Não", "Cancelar" };
+            int i = JOptionPane.showOptionDialog(this, "O fornecedor foi encontrado.", "Deseja realmente excluir?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+            if(i == 0) {
                 list.remove(p);
                 JOptionPane.showMessageDialog(this, "O fornecedor foi excluído com sucesso.");
             }else {
                 JOptionPane.showMessageDialog(this, "Exclusão cancelada.");
             }
         }
-        txtListing.setText(this.printProviderList());
+        printProviderList();
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-        String chosenCode = JOptionPane.showInputDialog("Informe o CNPJ do fornecedor que deseja editar", "");
+        String chosenCode = JOptionPane.showInputDialog("Informe o CNPJ do fornecedor que deseja editar:", "");
 
         this.providerEditing = this.searchProvider(chosenCode);
 
@@ -500,15 +534,15 @@ public class ProviderForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNewActionPerformed
 
     private void BtnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCancelActionPerformed
-        int i = JOptionPane.showConfirmDialog(this, "Ao cancelar, todas as informações digitadas serão perdidas. Deseja realmente cancelar?");
-        if(i == JOptionPane.YES_OPTION) {
+        Object[] options = { "Sim", "Não" };
+        int i = JOptionPane.showOptionDialog(this, "Ao cancelar, todas as informações digitadas serão perdidas", "Deseja realmente cancelar?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+        if(i == 0) {
             this.clearFields();
             this.enableFields(false);
         } 
     }//GEN-LAST:event_BtnCancelActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-
         if(validateFields()) {
             if(this.providerEditing == null) { // inserindo novo funcionário
                 this.fieldsToObject();
@@ -520,11 +554,15 @@ public class ProviderForm extends javax.swing.JFrame {
             this.enableFields(false);
 
             JOptionPane.showMessageDialog(this, "O fornecedor foi salvo com sucesso.");
-            txtListing.setText(this.printProviderList());
+            printProviderList();
         }
 
         
     }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void btnRefresh2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefresh2ActionPerformed
+        printProviderList();
+    }//GEN-LAST:event_btnRefresh2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -566,12 +604,14 @@ public class ProviderForm extends javax.swing.JFrame {
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnNew;
+    private javax.swing.JButton btnRefresh2;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSearch;
     private javax.swing.JFormattedTextField ftxtCnpj;
     private javax.swing.JFormattedTextField ftxtEmail;
     private javax.swing.JFormattedTextField ftxtSearch;
     private javax.swing.JFormattedTextField ftxtTel;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private java.awt.Label label1;
@@ -584,10 +624,9 @@ public class ProviderForm extends javax.swing.JFrame {
     private javax.swing.JLabel lblPosition;
     private javax.swing.JLabel lblTel;
     private javax.swing.JPanel pnlInputs;
-    private javax.swing.JScrollPane scpOutput;
+    private javax.swing.JTable tblListing;
     private javax.swing.JTextField txtAddress;
     private javax.swing.JTextField txtCompanyName;
-    private javax.swing.JTextArea txtListing;
     private javax.swing.JFormattedTextField txtProduct;
     private javax.swing.JTextField txtResponsibleName;
     // End of variables declaration//GEN-END:variables

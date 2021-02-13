@@ -4,6 +4,7 @@ import classes.Product;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 public class ProductForm extends javax.swing.JFrame {
     List<Product> list;
@@ -17,7 +18,6 @@ public class ProductForm extends javax.swing.JFrame {
                 
         this.enableFields(false);
         this.clearFields();
-        txtListing.setEnabled(false);
     }
 
     public void enableFields(boolean flag) {
@@ -59,19 +59,31 @@ public class ProductForm extends javax.swing.JFrame {
         txtDescription.setText(p.getDescription());
     }
     
-    public String printProductList() {
-        String totalList = "";
-        for(int i = 0; i < list.size(); i++) {
-            totalList = totalList + list.get(i).printProductToString();
-        }
-        return totalList;
-    }
-    
     public Product searchProduct(String code) {
         for(int i = 0; i < list.size(); i++) {
             if(list.get(i).getCode().equals(code)) return list.get(i);
         }
         return null;
+    }
+    
+    public void printProductList() {
+        String [] column = {"Código", "Produto", "Quantidade", "Preço de Custo", "Preço de Venda"};
+        DefaultTableModel model = new DefaultTableModel(column, 0);
+        
+        for(int i = 0; i < list.size(); i++) {
+            Object [] row = {list.get(i).getCode(), list.get(i).getName(), list.get(i).getQuantity(), list.get(i).getCostPrice(), list.get(i).getSalePrice()};
+            model.addRow(row);
+        }
+        tblListing.setModel(model);
+    }
+    
+    public void printProduct(Product p) {
+        String [] column = {"Código", "Produto", "Quantidade", "Preço de Custo", "Preço de Venda"};
+        DefaultTableModel model = new DefaultTableModel(column, 0);
+        
+        Object [] row = {p.getCode(), p.getName(), p.getQuantity(), p.getCostPrice(), p.getSalePrice()};
+        model.addRow(row);
+        tblListing.setModel(model);
     }
     
     public boolean validateFields() {
@@ -115,9 +127,6 @@ public class ProductForm extends javax.swing.JFrame {
         label1 = new java.awt.Label();
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        txtListing = new javax.swing.JTextArea();
-        lblOutput = new javax.swing.JLabel();
         txtSearch = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
         btnNew = new javax.swing.JButton();
@@ -139,20 +148,19 @@ public class ProductForm extends javax.swing.JFrame {
         lblSalePrice = new javax.swing.JLabel();
         ftxtSalePrice = new javax.swing.JFormattedTextField();
         BtnCancel = new javax.swing.JButton();
+        lblOutput = new javax.swing.JLabel();
+        jScrollPane = new javax.swing.JScrollPane();
+        tblListing = new javax.swing.JTable();
+        btnRefresh = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Sistema - Cadastro de Produto");
+        setMaximumSize(null);
+        setMinimumSize(new java.awt.Dimension(668, 529));
 
         label1.setAlignment(java.awt.Label.CENTER);
         label1.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         label1.setText("Cadastro de Produto");
-
-        txtListing.setColumns(20);
-        txtListing.setRows(5);
-        txtListing.setDisabledTextColor(new java.awt.Color(51, 102, 255));
-        jScrollPane2.setViewportView(txtListing);
-
-        lblOutput.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        lblOutput.setText("Output:");
 
         btnSearch.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\ERE_LPS_TAREFA1_RAYANNE\\CRUD\\src\\main\\java\\images\\search.png")); // NOI18N
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
@@ -282,11 +290,11 @@ public class ProductForm extends javax.swing.JFrame {
                                     .addComponent(ftxtCostPrice))
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(pnlInputsLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
                                 .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(lblCode)
                                     .addComponent(txtCode, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 0, Short.MAX_VALUE))))))
+                                .addGap(0, 13, Short.MAX_VALUE))))))
         );
         pnlInputsLayout.setVerticalGroup(
             pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -330,6 +338,30 @@ public class ProductForm extends javax.swing.JFrame {
             }
         });
 
+        lblOutput.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblOutput.setText("Output:");
+
+        tblListing.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane.setViewportView(tblListing);
+
+        btnRefresh.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\ERE_LPS_TAREFA1_RAYANNE\\CRUD\\src\\main\\java\\images\\refresh.png")); // NOI18N
+        btnRefresh.setIconTextGap(0);
+        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -360,14 +392,16 @@ public class ProductForm extends javax.swing.JFrame {
                             .addComponent(jSeparator2)
                             .addComponent(jSeparator1)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(pnlInputs, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(10, 10, 10)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(lblOutput)
-                                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 622, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(16, 16, 16)))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(lblOutput)
+                                                .addGap(557, 557, 557)
+                                                .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(jScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 624, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(pnlInputs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
@@ -396,11 +430,14 @@ public class ProductForm extends javax.swing.JFrame {
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnlInputs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lblOutput)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(11, 11, 11)
+                        .addComponent(lblOutput))
+                    .addComponent(btnRefresh, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(jScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20))
         );
 
         label1.getAccessibleContext().setAccessibleDescription("");
@@ -426,7 +463,7 @@ public class ProductForm extends javax.swing.JFrame {
         
         if(chosenCode.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Código do produto não foi informado!");
-            txtListing.setText(this.printProductList());
+            printProductList();
         }
         else if(txtSearch.getText().replace(" ", "").length() < 3){
             JOptionPane.showMessageDialog(this, "Preencha o código corretamente. (Obs.: no mínimo 4 dígitos)");
@@ -434,13 +471,10 @@ public class ProductForm extends javax.swing.JFrame {
         }
         else if(p == null) {
             JOptionPane.showMessageDialog(this, "Não existe produto para o código informado!");
-            txtListing.setText(this.printProductList());
+            printProductList();
         } else {
             txtSearch.setText("");
-            txtListing.setText("******** Resultado da Pesquisa *********\n" 
-                                + p.printProductToString()
-                                + "******** Lista de Produtos *********\n"
-                                + this.printProductList());
+            printProduct(p);
         }
     }//GEN-LAST:event_btnSearchActionPerformed
 
@@ -464,32 +498,31 @@ public class ProductForm extends javax.swing.JFrame {
           this.enableFields(false);
 
           JOptionPane.showMessageDialog(this, "O produto foi salvo com sucesso.");
-          txtListing.setText(this.printProductList());
-        } 
-        
-       
+          printProductList();
+        }
     }
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        String chosenCode = JOptionPane.showInputDialog("Informe o código do produto que deseja excluir", "");
+        String chosenCode = JOptionPane.showInputDialog("Informe o código do produto que deseja excluir:", "");
         
         Product p = this.searchProduct(chosenCode);
         
         if(p == null) {
             JOptionPane.showMessageDialog(this, "Não foi encontrado um produto para o código informado.");
         } else {
-            int i = JOptionPane.showConfirmDialog(this, "O produto foi encontrado. Deseja realmente excluir?");
-            if(i == JOptionPane.YES_OPTION) {
+            Object[] options = { "Sim", "Não", "Cancelar" };
+            int i = JOptionPane.showOptionDialog(this, "O produto foi encontrado.", "Deseja realmente excluir?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+            if(i == 0) {
                 list.remove(p);
                 JOptionPane.showMessageDialog(this, "O produto foi excluído com sucesso.");
             }else {
                 JOptionPane.showMessageDialog(this, "Exclusão cancelada.");
             }
         }
-        txtListing.setText(this.printProductList());        
+        printProductList();      
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-        String chosenCode = JOptionPane.showInputDialog("Informe o código do produto que deseja editar", "");
+        String chosenCode = JOptionPane.showInputDialog("Informe o código do produto que deseja editar:", "");
         
         this.productEditing = this.searchProduct(chosenCode);
         
@@ -515,17 +548,22 @@ public class ProductForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_ftxtCostPriceActionPerformed
 
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+        printProductList();
+    }//GEN-LAST:event_btnRefreshActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnCancel;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnNew;
+    private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSearch;
     private javax.swing.JFormattedTextField ftxtCostPrice;
     private javax.swing.JFormattedTextField ftxtSalePrice;
+    private javax.swing.JScrollPane jScrollPane;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private java.awt.Label label1;
@@ -537,9 +575,9 @@ public class ProductForm extends javax.swing.JFrame {
     private javax.swing.JLabel lblQuantity;
     private javax.swing.JLabel lblSalePrice;
     private javax.swing.JPanel pnlInputs;
+    private javax.swing.JTable tblListing;
     private javax.swing.JTextField txtCode;
     private javax.swing.JTextArea txtDescription;
-    private javax.swing.JTextArea txtListing;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtQuantity;
     private javax.swing.JTextField txtSearch;

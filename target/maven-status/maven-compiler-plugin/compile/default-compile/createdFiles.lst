@@ -33,7 +33,9 @@ gui\EmployeeForm$5.class
 gui\ProviderForm.class
 gui\ClientForm.class
 gui\ProviderForm$4.class
+gui\ClientForm$7.class
 gui\ProviderForm$1.class
+gui\EmployeeForm$8.class
 gui\ProductForm$7.class
 classes\Product.class
 gui\ProductForm$2.class
