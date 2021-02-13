@@ -7,12 +7,13 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 
 public class ClientForm extends javax.swing.JFrame {
 
-    List<Client> list;
-    Client clientEditing;
+    private List<Client> list;
+    private Client clientEditing;
 
     public ClientForm() {
         this.list = new ArrayList<>();
@@ -33,7 +34,6 @@ public class ClientForm extends javax.swing.JFrame {
         
         this.enableFields(false);
         this.clearFields();
-        txtListing.setEnabled(false);
     }
 
     public void enableFields(boolean flag) {
@@ -73,20 +73,33 @@ public class ClientForm extends javax.swing.JFrame {
         txtVehicles.setText(c.getVehicles()); 
     }
     
-    public String printClientList() {
-        String totalList = "";
-        for(int i = 0; i < list.size(); i++) {
-            totalList = totalList + list.get(i).printClientToString();
-        }
-        return totalList;
-    }
-    
     public Client searchClient(String code) {
         for(int i = 0; i < list.size(); i++) {
             if(list.get(i).getCpf().equals(code)) return list.get(i);
         }
         return null;
     }
+    
+    public void printClientList() {
+        String [] column = {"Nome", "CPF", "Telefone/Whatsapp"};
+        DefaultTableModel model = new DefaultTableModel(column, 0);
+        
+        for(int i = 0; i < list.size(); i++) {
+            Object [] row = {list.get(i).getName(), list.get(i).getCpf(), list.get(i).getTel()};
+            model.addRow(row);
+        }
+        tblListing.setModel(model);
+    }
+    
+    public void printClient(Client c) {
+        String [] column = {"Nome", "CPF", "Telefone/Whatsapp"};
+        DefaultTableModel model = new DefaultTableModel(column, 0);
+        
+        Object [] row = {c.getName(), c.getCpf(), c.getTel()};
+        model.addRow(row);
+        tblListing.setModel(model);
+    }
+    
     
     public boolean verifyCPF(String cpf) {
         int digito1 = 0, digito2 = 0, calcDigito1 = 0, calcDigito2 = 0, j = 10, z = 11;
@@ -175,8 +188,9 @@ public class ClientForm extends javax.swing.JFrame {
     private void initComponents() {
 
         label1 = new java.awt.Label();
-        jSeparator1 = new javax.swing.JSeparator();
+        ftxtSearch = new javax.swing.JFormattedTextField();
         btnSearch = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
         btnNew = new javax.swing.JButton();
         btnEdit = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
@@ -184,8 +198,6 @@ public class ClientForm extends javax.swing.JFrame {
         btnSave = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
         lblOutput = new javax.swing.JLabel();
-        scpOutput = new javax.swing.JScrollPane();
-        txtListing = new javax.swing.JTextArea();
         pnlInputs = new javax.swing.JPanel();
         lblName = new javax.swing.JLabel();
         txtName = new javax.swing.JTextField();
@@ -200,7 +212,9 @@ public class ClientForm extends javax.swing.JFrame {
         txtEmail = new javax.swing.JTextField();
         ftxtTel = new javax.swing.JFormattedTextField();
         ftxtCpf = new javax.swing.JFormattedTextField();
-        ftxtSearch = new javax.swing.JFormattedTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblListing = new javax.swing.JTable();
+        btnRefresh = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(null);
@@ -282,10 +296,6 @@ public class ClientForm extends javax.swing.JFrame {
 
         lblOutput.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblOutput.setText("Output:");
-
-        txtListing.setColumns(20);
-        txtListing.setRows(5);
-        scpOutput.setViewportView(txtListing);
 
         pnlInputs.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 204, 204)));
 
@@ -380,6 +390,27 @@ public class ClientForm extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        tblListing.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane1.setViewportView(tblListing);
+
+        btnRefresh.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\ERE_LPS_TAREFA1_RAYANNE\\CRUD\\src\\main\\java\\images\\refresh.png")); // NOI18N
+        btnRefresh.setIconTextGap(0);
+        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -395,29 +426,27 @@ public class ClientForm extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnNew, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(BtnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jSeparator2)
+                    .addComponent(pnlInputs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSeparator1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnNew, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(BtnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblOutput)
-                                    .addComponent(scpOutput, javax.swing.GroupLayout.PREFERRED_SIZE, 622, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(0, 20, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(pnlInputs, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addContainerGap())))
+                                .addComponent(lblOutput)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -445,10 +474,12 @@ public class ClientForm extends javax.swing.JFrame {
                 .addGap(9, 9, 9)
                 .addComponent(pnlInputs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lblOutput)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblOutput))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(scpOutput, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {BtnCancel, btnDelete, btnEdit, btnNew, btnSave});
@@ -463,21 +494,18 @@ public class ClientForm extends javax.swing.JFrame {
         
         if(chosenCpf.isEmpty()) {
             JOptionPane.showMessageDialog(this, "O CPF não foi informado!");
-            txtListing.setText(this.printClientList());
+            printClientList();
         }
-        else if(ftxtCpf.getText().replace(" ", "").length() < 14){
+        else if(ftxtSearch.getText().replace(" ", "").length() < 14){
             JOptionPane.showMessageDialog(this, "Preencha o CPF corretamente.");
             ftxtSearch.requestFocus();
         }
         else if(c == null) {
             JOptionPane.showMessageDialog(this, "Não existe cliente para o CPF informado!");
-            txtListing.setText(this.printClientList());
+            printClientList();
         } else {
             ftxtSearch.setText("");
-            txtListing.setText("******** Resultado da Pesquisa *********\n" 
-                                + c.printClientToString()
-                                + "******** Lista de Clientes*********\n"
-                                + this.printClientList());
+            printClient(c);
         }
     }//GEN-LAST:event_btnSearchActionPerformed
 
@@ -488,7 +516,7 @@ public class ClientForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNewActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-        String chosenCode = JOptionPane.showInputDialog("Informe o CPF do cliente que deseja editar", "");
+        String chosenCode = JOptionPane.showInputDialog("Informe o CPF do cliente que deseja editar:", "");
         String maskCpf = chosenCode.substring(0, 3) + "." + chosenCode.substring(3, 6) + "." + chosenCode.substring(6, 9) + "-" + chosenCode.substring(9, 11);
         
         this.clientEditing = this.searchClient(maskCpf);
@@ -504,7 +532,7 @@ public class ClientForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        String chosenCode = JOptionPane.showInputDialog("Informe o CPF do cliente que deseja excluir", "");
+        String chosenCode = JOptionPane.showInputDialog("Informe o CPF do cliente que deseja excluir:", "");
         String maskCpf = chosenCode.substring(0, 3) + "." + chosenCode.substring(3, 6) + "." + chosenCode.substring(6, 9) + "-" + chosenCode.substring(9, 11);
         
         Client c = this.searchClient(maskCpf);
@@ -512,20 +540,22 @@ public class ClientForm extends javax.swing.JFrame {
         if(c == null) {
             JOptionPane.showMessageDialog(this, "Não foi encontrado um cliente para o CPF informado.");
         } else {
-            int i = JOptionPane.showConfirmDialog(this, "O cliente foi encontrado. Deseja realmente excluir?");
-            if(i == JOptionPane.YES_OPTION) {
+            Object[] options = { "Sim", "Não", "Cancelar" };
+            int i = JOptionPane.showOptionDialog(this, "O cliente foi encontrado.", "Deseja realmente excluir?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+            if(i == 0) {
                 list.remove(c);
                 JOptionPane.showMessageDialog(this, "O cliente foi excluído com sucesso.");
             }else {
                 JOptionPane.showMessageDialog(this, "Exclusão cancelada.");
             }
         }
-        txtListing.setText(this.printClientList());        
+        printClientList();   
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void BtnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCancelActionPerformed
-        int i = JOptionPane.showConfirmDialog(this, "Ao cancelar, todas as informações digitadas serão perdidas. Deseja realmente cancelar?");
-        if(i == JOptionPane.YES_OPTION) {
+        Object[] options = { "Sim", "Não" };
+        int i = JOptionPane.showOptionDialog(this, "Ao cancelar, todas as informações digitadas serão perdidas", "Deseja realmente cancelar?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+        if(i == 0) {
             this.clearFields();
             this.enableFields(false);
         }        
@@ -544,20 +574,26 @@ public class ClientForm extends javax.swing.JFrame {
             this.enableFields(false);
 
             JOptionPane.showMessageDialog(this, "O cliente foi salvo com sucesso.");
-            txtListing.setText(this.printClientList());
+            printClientList();
         }
     }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+        printClientList();
+    }//GEN-LAST:event_btnRefreshActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnCancel;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnNew;
+    private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSearch;
     private javax.swing.JFormattedTextField ftxtCpf;
     private javax.swing.JFormattedTextField ftxtSearch;
     private javax.swing.JFormattedTextField ftxtTel;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private java.awt.Label label1;
@@ -569,11 +605,10 @@ public class ClientForm extends javax.swing.JFrame {
     private javax.swing.JLabel lblTel;
     private javax.swing.JLabel lblVehicles;
     private javax.swing.JPanel pnlInputs;
-    private javax.swing.JScrollPane scpOutput;
     private javax.swing.JScrollPane scpVehicles;
+    private javax.swing.JTable tblListing;
     private javax.swing.JTextField txtAddress;
     private javax.swing.JTextField txtEmail;
-    private javax.swing.JTextArea txtListing;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextArea txtVehicles;
     // End of variables declaration//GEN-END:variables
