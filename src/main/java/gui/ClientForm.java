@@ -88,6 +88,88 @@ public class ClientForm extends javax.swing.JFrame {
         return null;
     }
     
+    public boolean verifyCPF(String cpf) {
+        int digito1 = 0, digito2 = 0, calcDigito1 = 0, calcDigito2 = 0, j = 10, z = 11;
+        int [] arrayCpf = new int[9];
+        boolean repetido = true;
+        
+        digito1 = Integer.parseInt(cpf.substring(12, 13));
+        digito2 = Integer.parseInt(cpf.substring(13, 14));
+        
+        cpf = cpf.substring(0, 3) + cpf.substring(4, 7) + cpf.substring(8, 11);
+       
+        for(int i = 0; i < arrayCpf.length; i++) {
+            arrayCpf[i] = Integer.parseInt(cpf.substring(i, i+1));
+            
+            calcDigito1 += j * arrayCpf[i];
+            j--;
+            
+            calcDigito2 += z * arrayCpf[i];
+            z--;
+            
+            if(arrayCpf[0] != arrayCpf[i] && repetido) repetido = false;   
+        }
+        
+        calcDigito2 += digito1 * z;
+        
+        calcDigito1 = calcDigito1 * 10 % 11;
+        calcDigito2 = calcDigito2 * 10 % 11;
+        
+        if(calcDigito1 == 10) {
+            calcDigito1 = 0;
+        }
+        
+        if(calcDigito2 == 10) {
+            calcDigito2 = 0;
+        }
+        
+        if((calcDigito1 != digito1) || (calcDigito2 != digito2) || repetido) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    
+    public boolean validateFields() {
+        if(!txtName.getText().replace(" ", "").matches("[A-Za-z]{3,}")){
+            JOptionPane.showMessageDialog(this, "Preencha o nome do cliente corretamente. (Obs.: sem acento e somente letras)");
+            txtName.requestFocus();
+            return false;
+        }
+        if(ftxtCpf.getText().replace(" ", "").length() < 14){
+            JOptionPane.showMessageDialog(this, "Preencha o CPF corretamente.");
+            ftxtCpf.requestFocus();
+            return false;
+        } else {
+            if(!verifyCPF(ftxtCpf.getText())) {
+                JOptionPane.showMessageDialog(this, "CNPJ inválido.");
+                ftxtCpf.setText("");
+                ftxtCpf.requestFocus();
+                return false;
+            }
+        }
+        if(ftxtTel.getText().replace(" ", "").length() < 13){
+            JOptionPane.showMessageDialog(this, "Preencha o telefone corretamente.");
+            ftxtTel.requestFocus();
+            return false;
+        }
+        if(txtAddress.getText().replace(" ", "").length() < 20){
+            JOptionPane.showMessageDialog(this, "Preencha o endereço corretamente. Ex.: Rua Exemplo, 24, Centro - Cidade/Estado");
+            txtAddress.requestFocus();
+            return false;
+        }
+        if(!txtEmail.getText().replace(" ", "").matches("([a-z]){1,}([a-z0-9._-]){1,}([@]){1}([a-z]){2,}([.]){1}([a-z]){2,}([.]?){1}([a-z]?){2,}")){
+            JOptionPane.showMessageDialog(this, "Preencha o email corretamente. (Ex.: exemplo@gmail.com)");
+            txtEmail.requestFocus();
+            return false;
+        }
+        if(!txtVehicles.getText().replace(" ", "").matches("[A-Za-z]{3,}")){
+            JOptionPane.showMessageDialog(this, "Preencha o veículo corretamente. (Obs.: sem acento e somente letras)");
+            txtVehicles.requestFocus();
+            return false;
+        }
+        return true;
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -382,6 +464,10 @@ public class ClientForm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "O CPF não foi informado!");
             txtListing.setText(this.printClientList());
         }
+        else if(ftxtCpf.getText().replace(" ", "").length() < 14){
+            JOptionPane.showMessageDialog(this, "Preencha o CPF corretamente.");
+            ftxtCpf.requestFocus();
+        }
         else if(c == null) {
             JOptionPane.showMessageDialog(this, "Não existe cliente para o CPF informado!");
             txtListing.setText(this.printClientList());
@@ -435,23 +521,28 @@ public class ClientForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void BtnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCancelActionPerformed
-        this.clearFields();
-        this.enableFields(false);
+        int i = JOptionPane.showConfirmDialog(this, "Ao cancelar, todas as informações digitadas serão perdidas. Deseja realmente cancelar?");
+        if(i == JOptionPane.YES_OPTION) {
+            this.clearFields();
+            this.enableFields(false);
+        }        
     }//GEN-LAST:event_BtnCancelActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        if(this.clientEditing == null) { // inserindo novo cliente
-            this.fieldsToObject(); 
-        } else { // salvando um cliente que foi alterado
-            this.list.remove(this.clientEditing);
-            this.fieldsToObject();       
+        if(validateFields()) {
+            if(this.clientEditing == null) { // inserindo novo cliente
+                this.fieldsToObject(); 
+            } else { // salvando um cliente que foi alterado
+                this.list.remove(this.clientEditing);
+                this.fieldsToObject();       
+            }
+
+            this.clearFields();
+            this.enableFields(false);
+
+            JOptionPane.showMessageDialog(this, "O cliente foi salvo com sucesso.");
+            txtListing.setText(this.printClientList());
         }
-              
-        this.clearFields();
-        this.enableFields(false);
-        
-        JOptionPane.showMessageDialog(this, "O cliente foi salvo com sucesso.");
-        txtListing.setText(this.printClientList());
     }//GEN-LAST:event_btnSaveActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

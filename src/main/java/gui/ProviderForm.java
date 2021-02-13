@@ -312,9 +312,7 @@ public class ProviderForm extends javax.swing.JFrame {
                             .addComponent(lblPosition))
                         .addGap(18, 18, 18)
                         .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnlInputsLayout.createSequentialGroup()
-                                .addComponent(lblContractDate)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(lblContractDate)
                             .addComponent(txtProduct))))
                 .addContainerGap())
         );
@@ -502,8 +500,11 @@ public class ProviderForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNewActionPerformed
 
     private void BtnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCancelActionPerformed
-        this.clearFields();
-        this.enableFields(false);
+        int i = JOptionPane.showConfirmDialog(this, "Ao cancelar, todas as informações digitadas serão perdidas. Deseja realmente cancelar?");
+        if(i == JOptionPane.YES_OPTION) {
+            this.clearFields();
+            this.enableFields(false);
+        } 
     }//GEN-LAST:event_BtnCancelActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed

@@ -504,8 +504,11 @@ public class ProductForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void BtnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCancelActionPerformed
-        this.clearFields();
-        this.enableFields(false);
+       int i = JOptionPane.showConfirmDialog(this, "Ao cancelar, todas as informações digitadas serão perdidas. Deseja realmente cancelar?");
+        if(i == JOptionPane.YES_OPTION) {
+            this.clearFields();
+            this.enableFields(false);
+        } 
     }//GEN-LAST:event_BtnCancelActionPerformed
 
     private void ftxtCostPriceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ftxtCostPriceActionPerformed
