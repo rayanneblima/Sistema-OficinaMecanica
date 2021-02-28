@@ -1,7 +1,7 @@
 package com.mycompany.crud;
 
+import connection.DBConnection;
 import gui.MenuForm;
-
 
 /**
  *
@@ -14,6 +14,9 @@ public class ProjetoCRUD {
     public static void main(String[] args){
         MenuForm tela = new MenuForm();
         tela.setVisible(true);
+        
+        DBConnection conn = new DBConnection();
+        conn.getConnection();
         
         // trabalhando com datas
         /*Date now = new Date();
