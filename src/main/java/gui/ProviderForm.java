@@ -24,10 +24,12 @@ public class ProviderForm extends javax.swing.JFrame {
             MaskFormatter maskTel = new MaskFormatter("(##)#####-####");
             MaskFormatter maskCnpj = new MaskFormatter("##.###.###/####-##");
             MaskFormatter maskCnpj2 = new MaskFormatter("##.###.###/####-##");
+            MaskFormatter maskCpf = new MaskFormatter("###.###.###-##");
             
             maskTel.install(ftxtTel);
             maskCnpj.install(ftxtCnpj);
             maskCnpj2.install(ftxtSearch);
+            maskCpf.install(ftxtCpf);
         } catch(ParseException ex) {
             Logger.getLogger(EmployeeForm.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -50,6 +52,7 @@ public class ProviderForm extends javax.swing.JFrame {
         txtAddress.setText("");
         txtProduct.setText("");
         txtResponsibleName.setText("");
+        ftxtCpf.setText("");
     }
     
     public void fieldsToObject() {
@@ -61,7 +64,8 @@ public class ProviderForm extends javax.swing.JFrame {
         p.setEmail(ftxtEmail.getText());
         p.setAddress(txtAddress.getText());
         p.setProduct(txtProduct.getText());
-        p.setResponsibleName(txtResponsibleName.getText());
+        p.setName(txtResponsibleName.getText());
+        p.setCpf(ftxtCpf.getText());
         
         list.add(p);
     }
@@ -73,7 +77,8 @@ public class ProviderForm extends javax.swing.JFrame {
         ftxtEmail.setText(p.getEmail());
         txtAddress.setText(p.getAddress());
         txtProduct.setText(p.getProduct());
-        txtResponsibleName.setText(p.getResponsibleName());    
+        txtResponsibleName.setText(p.getName());  
+        ftxtCpf.setText(p.getCpf());  
     }
     
     public Provider searchProvider(String code) {
@@ -88,7 +93,7 @@ public class ProviderForm extends javax.swing.JFrame {
         DefaultTableModel model = new DefaultTableModel(column, 0);
         
         for(int i = 0; i < list.size(); i++) {
-            Object [] row = {list.get(i).getCompanyName(), list.get(i).getResponsibleName(), list.get(i).getTel(), list.get(i).getProduct()};
+            Object [] row = {list.get(i).getCompanyName(), list.get(i).getName(), list.get(i).getTel(), list.get(i).getProduct()};
             model.addRow(row);
         }
         tblListing.setModel(model);
@@ -98,7 +103,7 @@ public class ProviderForm extends javax.swing.JFrame {
         String [] column = {"Empresa", "Responsável", "Telefone/Whatsapp", "Tipo de Produto"};
         DefaultTableModel model = new DefaultTableModel(column, 0);
         
-        Object [] row = {p.getCompanyName(), p.getResponsibleName(), p.getTel(), p.getProduct()};
+        Object [] row = {p.getCompanyName(), p.getName(), p.getTel(), p.getProduct()};
         model.addRow(row);
         tblListing.setModel(model);
     }
@@ -108,12 +113,68 @@ public class ProviderForm extends javax.swing.JFrame {
         return true;
     }
     
+     public boolean verifyCPF(String cpf) {
+        int digito1 = 0, digito2 = 0, calcDigito1 = 0, calcDigito2 = 0, j = 10, z = 11;
+        int [] arrayCpf = new int[9];
+        boolean repetido = true;
+        
+        digito1 = Integer.parseInt(cpf.substring(12, 13));
+        digito2 = Integer.parseInt(cpf.substring(13, 14));
+        
+        cpf = cpf.substring(0, 3) + cpf.substring(4, 7) + cpf.substring(8, 11);
+       
+        for(int i = 0; i < arrayCpf.length; i++) {
+            arrayCpf[i] = Integer.parseInt(cpf.substring(i, i+1));
+            
+            calcDigito1 += j * arrayCpf[i];
+            j--;
+            
+            calcDigito2 += z * arrayCpf[i];
+            z--;
+            
+            if(arrayCpf[0] != arrayCpf[i] && repetido) repetido = false;   
+        }
+        
+        calcDigito2 += digito1 * z;
+        
+        calcDigito1 = calcDigito1 * 10 % 11;
+        calcDigito2 = calcDigito2 * 10 % 11;
+        
+        if(calcDigito1 == 10) {
+            calcDigito1 = 0;
+        }
+        
+        if(calcDigito2 == 10) {
+            calcDigito2 = 0;
+        }
+        
+        if((calcDigito1 != digito1) || (calcDigito2 != digito2) || repetido) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    
     public boolean validateFields() {
         if(!txtCompanyName.getText().replace(" ", "").matches("[A-Za-z]{3,}")){
             JOptionPane.showMessageDialog(this, "Preencha o nome da empresa corretamente. (Obs.: sem acento e somente letras)");
             txtCompanyName.requestFocus();
             return false;
         }
+        
+        if(ftxtCpf.getText().replace(" ", "").length() < 14){
+            JOptionPane.showMessageDialog(this, "Preencha o CPF corretamente.");
+            ftxtCpf.requestFocus();
+            return false;
+        } else {
+            if(!verifyCPF(ftxtCpf.getText())) {
+                JOptionPane.showMessageDialog(this, "CPF inválido.");
+                ftxtCpf.setText("");
+                ftxtCpf.requestFocus();
+                return false;
+            }
+        }
+        
         if(ftxtCnpj.getText().replace(" ", "").length() < 18){
             JOptionPane.showMessageDialog(this, "Preencha o CNPJ corretamente.");
             ftxtCnpj.requestFocus();
@@ -173,16 +234,18 @@ public class ProviderForm extends javax.swing.JFrame {
         txtCompanyName = new javax.swing.JTextField();
         lblAddress = new javax.swing.JLabel();
         txtAddress = new javax.swing.JTextField();
-        lblCPF = new javax.swing.JLabel();
+        lblCnpj = new javax.swing.JLabel();
         lblTel = new javax.swing.JLabel();
         lblEmail = new javax.swing.JLabel();
         lblPosition = new javax.swing.JLabel();
-        txtResponsibleName = new javax.swing.JTextField();
         lblContractDate = new javax.swing.JLabel();
         ftxtCnpj = new javax.swing.JFormattedTextField();
         ftxtTel = new javax.swing.JFormattedTextField();
         ftxtEmail = new javax.swing.JFormattedTextField();
         txtProduct = new javax.swing.JFormattedTextField();
+        txtResponsibleName = new javax.swing.JTextField();
+        lblCpf = new javax.swing.JLabel();
+        ftxtCpf = new javax.swing.JFormattedTextField();
         lblOutput = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblListing = new javax.swing.JTable();
@@ -275,8 +338,8 @@ public class ProviderForm extends javax.swing.JFrame {
         lblAddress.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblAddress.setText("Endereço Completo:");
 
-        lblCPF.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        lblCPF.setText("CNPJ:");
+        lblCnpj.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblCnpj.setText("CNPJ:");
 
         lblTel.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblTel.setText("Telefone / Whatsapp:");
@@ -290,6 +353,9 @@ public class ProviderForm extends javax.swing.JFrame {
         lblContractDate.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         lblContractDate.setText("Tipo de Produto:");
 
+        lblCpf.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblCpf.setText("CPF:");
+
         javax.swing.GroupLayout pnlInputsLayout = new javax.swing.GroupLayout(pnlInputs);
         pnlInputs.setLayout(pnlInputsLayout);
         pnlInputsLayout.setHorizontalGroup(
@@ -298,37 +364,44 @@ public class ProviderForm extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlInputsLayout.createSequentialGroup()
-                        .addComponent(txtAddress)
-                        .addGap(18, 18, 18)
                         .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblEmail)
-                            .addComponent(ftxtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(lblPosition)
+                            .addComponent(txtResponsibleName, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(pnlInputsLayout.createSequentialGroup()
                         .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtCompanyName, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblName))
-                        .addGap(14, 14, 14)
-                        .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblCPF)
-                            .addComponent(ftxtCnpj, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(ftxtTel)
                             .addGroup(pnlInputsLayout.createSequentialGroup()
-                                .addComponent(lblTel)
-                                .addGap(0, 60, Short.MAX_VALUE))))
-                    .addGroup(pnlInputsLayout.createSequentialGroup()
-                        .addComponent(lblAddress)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(pnlInputsLayout.createSequentialGroup()
-                        .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtResponsibleName, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblPosition))
-                        .addGap(18, 18, 18)
-                        .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblContractDate)
-                            .addComponent(txtProduct))))
-                .addContainerGap())
+                                .addComponent(lblAddress)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(pnlInputsLayout.createSequentialGroup()
+                                .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(pnlInputsLayout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(lblCpf)
+                                            .addComponent(ftxtCpf, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(txtAddress))
+                                .addGap(10, 10, 10)
+                                .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblEmail)
+                                    .addComponent(ftxtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblContractDate)))
+                            .addGroup(pnlInputsLayout.createSequentialGroup()
+                                .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtCompanyName, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblName))
+                                .addGap(14, 14, 14)
+                                .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblCnpj)
+                                    .addComponent(ftxtCnpj, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(ftxtTel)
+                                    .addGroup(pnlInputsLayout.createSequentialGroup()
+                                        .addComponent(lblTel)
+                                        .addGap(0, 60, Short.MAX_VALUE)))))
+                        .addContainerGap())))
         );
         pnlInputsLayout.setVerticalGroup(
             pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -336,7 +409,7 @@ public class ProviderForm extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblName)
-                    .addComponent(lblCPF)
+                    .addComponent(lblCnpj)
                     .addComponent(lblTel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -355,13 +428,19 @@ public class ProviderForm extends javax.swing.JFrame {
                         .addComponent(lblEmail)
                         .addGap(26, 26, 26)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
-                .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblPosition)
-                    .addComponent(lblContractDate))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtResponsibleName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtProduct, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlInputsLayout.createSequentialGroup()
+                        .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblPosition)
+                            .addComponent(lblContractDate))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(pnlInputsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtProduct, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtResponsibleName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlInputsLayout.createSequentialGroup()
+                        .addComponent(lblCpf)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ftxtCpf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -608,6 +687,7 @@ public class ProviderForm extends javax.swing.JFrame {
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSearch;
     private javax.swing.JFormattedTextField ftxtCnpj;
+    private javax.swing.JFormattedTextField ftxtCpf;
     private javax.swing.JFormattedTextField ftxtEmail;
     private javax.swing.JFormattedTextField ftxtSearch;
     private javax.swing.JFormattedTextField ftxtTel;
@@ -616,8 +696,9 @@ public class ProviderForm extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator2;
     private java.awt.Label label1;
     private javax.swing.JLabel lblAddress;
-    private javax.swing.JLabel lblCPF;
+    private javax.swing.JLabel lblCnpj;
     private javax.swing.JLabel lblContractDate;
+    private javax.swing.JLabel lblCpf;
     private javax.swing.JLabel lblEmail;
     private javax.swing.JLabel lblName;
     private javax.swing.JLabel lblOutput;
