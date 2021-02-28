@@ -1,6 +1,7 @@
 package gui;
 
 import classes.Provider;
+import dao.ProviderDAO;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +68,9 @@ public class ProviderForm extends javax.swing.JFrame {
         p.setName(txtResponsibleName.getText());
         p.setCpf(ftxtCpf.getText());
         
-        list.add(p);
+        list.add(p);  // adicionando em uma lista, sem BD
+        ProviderDAO clientDAO = new ProviderDAO();
+        clientDAO.insert(p);
     }
     
     public void objectToFields(Provider p) {        
