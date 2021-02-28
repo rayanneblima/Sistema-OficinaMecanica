@@ -3,6 +3,7 @@ package classes;
 import java.util.Scanner;
 
 public class Provider extends Person {
+    private int id_provider;
     private String companyName;
     private String cnpj;
     private String product;

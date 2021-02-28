@@ -1,6 +1,7 @@
 package gui;
 
 import classes.Client;
+import dao.ClientDAO;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,9 +60,11 @@ public class ClientForm extends javax.swing.JFrame {
         c.setTel(ftxtTel.getText());
         c.setEmail(txtEmail.getText());
         c.setAddress(txtAddress.getText());
-        c.setVehicles(txtVehicles.getText());       
+        //c.setVehicles(txtVehicles.getText());      
         
-        list.add(c);
+        list.add(c);  // adicionando em uma lista, sem BD
+        ClientDAO clientDAO = new ClientDAO();
+        clientDAO.insert(c);
     }
     
     public void objectToFields(Client c) {        
@@ -566,7 +569,7 @@ public class ClientForm extends javax.swing.JFrame {
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         if(validateFields()) {
             if(this.clientEditing == null) { // inserindo novo cliente
-                this.fieldsToObject(); 
+                this.fieldsToObject();
             } else { // salvando um cliente que foi alterado
                 this.list.remove(this.clientEditing);
                 this.fieldsToObject();       

@@ -3,6 +3,7 @@ package classes;
 import java.util.Scanner;
 
 public class Employee extends Person {
+    private int id_employee;
     private String position;
     private int workHours;
     private String salary;

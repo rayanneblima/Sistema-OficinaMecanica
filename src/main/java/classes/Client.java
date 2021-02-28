@@ -3,6 +3,7 @@ package classes;
 import java.util.Scanner;
 
 public class Client extends Person {
+    private int id_client;
     private String vehicles;
     
     public Client() {
