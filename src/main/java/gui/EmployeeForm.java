@@ -1,6 +1,7 @@
 package gui;
 
 import classes.Employee;
+import dao.EmployeeDAO;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +71,9 @@ public class EmployeeForm extends javax.swing.JFrame {
         e.setSalary(ftxtSalary.getText());
         e.setContractDate(ftxtContractDate.getText());
             
-        list.add(e);
+        list.add(e);  // adicionando em uma lista, sem BD
+        EmployeeDAO clientDAO = new EmployeeDAO();
+        clientDAO.insert(e);
     }
     
     public void objectToFields(Employee e) {        
