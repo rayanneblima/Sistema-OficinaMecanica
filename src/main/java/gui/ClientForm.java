@@ -1,7 +1,9 @@
 package gui;
 
 import classes.Client;
+import classes.Person;
 import dao.ClientDAO;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,11 +15,9 @@ import javax.swing.text.MaskFormatter;
 
 public class ClientForm extends javax.swing.JFrame {
 
-    private List<Client> list;
-    private Client clientEditing;
+    private Person clientEditing;
 
     public ClientForm() {
-        this.list = new ArrayList<>();
         this.clientEditing = null;
         
         initComponents();
@@ -29,6 +29,7 @@ public class ClientForm extends javax.swing.JFrame {
             maskTel.install(ftxtTel);
             maskCpf.install(ftxtCpf);
             maskCpf2.install(ftxtSearch);
+            printClientList();
         } catch(ParseException ex) {
             Logger.getLogger(EmployeeForm.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -62,47 +63,49 @@ public class ClientForm extends javax.swing.JFrame {
         c.setAddress(txtAddress.getText());
         //c.setVehicles(txtVehicles.getText());      
         
-        list.add(c);  // adicionando em uma lista, sem BD
         ClientDAO clientDAO = new ClientDAO();
         clientDAO.insert(c);
     }
     
-    public void objectToFields(Client c) {        
-        txtName.setText(c.getName());
-        ftxtCpf.setText(c.getCpf());
-        ftxtTel.setText(c.getTel());
-        txtEmail.setText(c.getEmail());
-        txtAddress.setText(c.getAddress());
-        txtVehicles.setText(c.getVehicles()); 
+    public void objectToFields(Person p) {
+        txtName.setText(p.getName());
+        ftxtCpf.setText(p.getCpf());
+        ftxtTel.setText(p.getTel());
+        txtEmail.setText(p.getEmail());
+        txtAddress.setText(p.getAddress());
     }
     
-    public Client searchClient(String code) {
-        for(int i = 0; i < list.size(); i++) {
-            if(list.get(i).getCpf().equals(code)) return list.get(i);
+    public Person searchClient(String code) {
+        ClientDAO clientDAO = new ClientDAO();
+        Person response = clientDAO.getClientByCpf(code);
+        if(!response.getName().equals("")) {
+            return response;
         }
         return null;
     }
     
     public void printClientList() {
         String [] column = {"Nome", "CPF", "Telefone/Whatsapp"};
+        
+        ClientDAO clientDAO = new ClientDAO();
+        ArrayList<Person> response = clientDAO.getClients();
         DefaultTableModel model = new DefaultTableModel(column, 0);
         
-        for(int i = 0; i < list.size(); i++) {
-            Object [] row = {list.get(i).getName(), list.get(i).getCpf(), list.get(i).getTel()};
+        for(int i = 0; i < response.size(); i++) {
+            Object [] row = {response.get(i).getName(), response.get(i).getCpf(), response.get(i).getTel()};
             model.addRow(row);
         }
         tblListing.setModel(model);
     }
     
-    public void printClient(Client c) {
+    public void printClient(Person p) {
         String [] column = {"Nome", "CPF", "Telefone/Whatsapp"};
         DefaultTableModel model = new DefaultTableModel(column, 0);
         
-        Object [] row = {c.getName(), c.getCpf(), c.getTel()};
+        Object [] row = {p.getName(), p.getCpf(), p.getTel()};
         model.addRow(row);
         tblListing.setModel(model);
     }
-    
     
     public boolean verifyCPF(String cpf) {
         int digito1 = 0, digito2 = 0, calcDigito1 = 0, calcDigito2 = 0, j = 10, z = 11;
@@ -495,7 +498,7 @@ public class ClientForm extends javax.swing.JFrame {
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         String chosenCpf = ftxtSearch.getText();
         
-        Client c = this.searchClient(chosenCpf);
+        Person p = this.searchClient(chosenCpf);
         
         if(chosenCpf.isEmpty()) {
             JOptionPane.showMessageDialog(this, "O CPF não foi informado!");
@@ -505,12 +508,12 @@ public class ClientForm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Preencha o CPF corretamente.");
             ftxtSearch.requestFocus();
         }
-        else if(c == null) {
+        else if(p == null) {
             JOptionPane.showMessageDialog(this, "Não existe cliente para o CPF informado!");
             printClientList();
         } else {
             ftxtSearch.setText("");
-            printClient(c);
+            printClient(p);
         }
     }//GEN-LAST:event_btnSearchActionPerformed
 
@@ -540,15 +543,16 @@ public class ClientForm extends javax.swing.JFrame {
         String chosenCode = JOptionPane.showInputDialog("Informe o CPF do cliente que deseja excluir:", "");
         String maskCpf = chosenCode.substring(0, 3) + "." + chosenCode.substring(3, 6) + "." + chosenCode.substring(6, 9) + "-" + chosenCode.substring(9, 11);
         
-        Client c = this.searchClient(maskCpf);
+        Person p = this.searchClient(maskCpf);
         
-        if(c == null) {
+        if(p == null) {
             JOptionPane.showMessageDialog(this, "Não foi encontrado um cliente para o CPF informado.");
         } else {
             Object[] options = { "Sim", "Não", "Cancelar" };
             int i = JOptionPane.showOptionDialog(this, "O cliente foi encontrado.", "Deseja realmente excluir?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
             if(i == 0) {
-                list.remove(c);
+                ClientDAO clientDAO = new ClientDAO();
+                clientDAO.deleteClient(maskCpf);
                 JOptionPane.showMessageDialog(this, "O cliente foi excluído com sucesso.");
             }else {
                 JOptionPane.showMessageDialog(this, "Exclusão cancelada.");
@@ -571,8 +575,9 @@ public class ClientForm extends javax.swing.JFrame {
             if(this.clientEditing == null) { // inserindo novo cliente
                 this.fieldsToObject();
             } else { // salvando um cliente que foi alterado
-                this.list.remove(this.clientEditing);
-                this.fieldsToObject();       
+                ClientDAO clientDAO = new ClientDAO();
+                clientDAO.updateClient(this.clientEditing);
+                printClientList();
             }
 
             this.clearFields();

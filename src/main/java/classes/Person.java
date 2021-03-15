@@ -3,7 +3,6 @@ package classes;
 import java.util.Scanner;
 
 public class Person {
-    private int id_person;
     private String name;
     private String cpf;
     private String tel;
@@ -132,6 +131,6 @@ public class Person {
     public void setAddress(String address) {
         this.address = address;
     }
-   
+    
 }
 
