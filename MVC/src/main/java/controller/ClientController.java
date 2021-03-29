@@ -19,7 +19,7 @@ public class ClientController {
         clientView.setLocationRelativeTo(null);
     }
     
-    public void createClient(Person person) {
+    public void createClient(String[] person) {
         clientDAO.insert(person);
     }
     
@@ -45,7 +45,7 @@ public class ClientController {
     public String[] getClientByCpf(String cpf) {
         Person responseDAO = clientDAO.getClientByCpf(cpf);
         
-        String[] client = {responseDAO.getName(), responseDAO.getCpf(), responseDAO.getTel()};
+        String[] client = {responseDAO.getName(), responseDAO.getCpf(), responseDAO.getTel(), responseDAO.getEmail(), responseDAO.getAddress()};
         
         return client;
     }

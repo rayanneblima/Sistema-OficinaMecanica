@@ -264,7 +264,7 @@ public class ProviderForm extends javax.swing.JFrame {
         label1.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         label1.setText("Cadastro de Fornecedor");
 
-        btnSearch.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\ERE_LPS_TAREFA1_RAYANNE\\CRUD\\src\\main\\java\\images\\search.png")); // NOI18N
+        btnSearch.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\Oficina\\MVC\\src\\main\\java\\images\\search.png")); // NOI18N
         btnSearch.setIconTextGap(0);
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -273,7 +273,7 @@ public class ProviderForm extends javax.swing.JFrame {
         });
 
         btnDelete.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btnDelete.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\ERE_LPS_TAREFA1_RAYANNE\\CRUD\\src\\main\\java\\images\\delete.png")); // NOI18N
+        btnDelete.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\Oficina\\MVC\\src\\main\\java\\images\\delete.png")); // NOI18N
         btnDelete.setText("Excluir");
         btnDelete.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnDelete.setMaximumSize(new java.awt.Dimension(89, 33));
@@ -286,7 +286,7 @@ public class ProviderForm extends javax.swing.JFrame {
         });
 
         btnEdit.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btnEdit.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\ERE_LPS_TAREFA1_RAYANNE\\CRUD\\src\\main\\java\\images\\edit.png")); // NOI18N
+        btnEdit.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\Oficina\\MVC\\src\\main\\java\\images\\edit.png")); // NOI18N
         btnEdit.setText("Editar");
         btnEdit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnEdit.setMaximumSize(new java.awt.Dimension(89, 33));
@@ -299,7 +299,7 @@ public class ProviderForm extends javax.swing.JFrame {
         });
 
         btnNew.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btnNew.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\ERE_LPS_TAREFA1_RAYANNE\\CRUD\\src\\main\\java\\images\\add.png")); // NOI18N
+        btnNew.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\Oficina\\MVC\\src\\main\\java\\images\\add.png")); // NOI18N
         btnNew.setText("Novo");
         btnNew.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnNew.addActionListener(new java.awt.event.ActionListener() {
@@ -309,7 +309,7 @@ public class ProviderForm extends javax.swing.JFrame {
         });
 
         BtnCancel.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        BtnCancel.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\ERE_LPS_TAREFA1_RAYANNE\\CRUD\\src\\main\\java\\images\\cancel.png")); // NOI18N
+        BtnCancel.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\Oficina\\MVC\\src\\main\\java\\images\\cancel.png")); // NOI18N
         BtnCancel.setText("Cancelar");
         BtnCancel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         BtnCancel.setMaximumSize(new java.awt.Dimension(89, 33));
@@ -322,7 +322,7 @@ public class ProviderForm extends javax.swing.JFrame {
         });
 
         btnSave.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btnSave.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\ERE_LPS_TAREFA1_RAYANNE\\CRUD\\src\\main\\java\\images\\save.png")); // NOI18N
+        btnSave.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\Oficina\\MVC\\src\\main\\java\\images\\save.png")); // NOI18N
         btnSave.setText("Salvar");
         btnSave.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSave.setMaximumSize(new java.awt.Dimension(89, 33));
@@ -464,7 +464,7 @@ public class ProviderForm extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tblListing);
 
-        btnRefresh2.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\ERE_LPS_TAREFA1_RAYANNE\\CRUD\\src\\main\\java\\images\\refresh.png")); // NOI18N
+        btnRefresh2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/refresh.png"))); // NOI18N
         btnRefresh2.setIconTextGap(0);
         btnRefresh2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -547,7 +547,7 @@ public class ProviderForm extends javax.swing.JFrame {
                     .addComponent(btnRefresh2, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(50, Short.MAX_VALUE))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
 
         pack();

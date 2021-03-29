@@ -1,11 +1,8 @@
 package view;
 
 import controller.EmployeeController;
-import model.Employee;
-import model.dao.EmployeeDAO;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -14,14 +11,12 @@ import javax.swing.text.MaskFormatter;
 
 public class EmployeeForm extends javax.swing.JFrame {
 
-    private List<Employee> list;
-    private Employee employeeEditing;
-
+    private String[] employeeEditing;
     private EmployeeController employeeController;
     
     public EmployeeForm(EmployeeController employeeController) {
-        this.list = new ArrayList<>();
         this.employeeEditing = null;
+        this.employeeController = employeeController;
         
         initComponents();
         try {
@@ -38,6 +33,7 @@ public class EmployeeForm extends javax.swing.JFrame {
             Logger.getLogger(EmployeeForm.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        this.printEmployeeList();
         this.enableFields(false);
         this.clearFields();
     }
@@ -62,59 +58,59 @@ public class EmployeeForm extends javax.swing.JFrame {
     
     public void fieldsToObject() {
         
-        Employee e = new Employee();
-            
-        e.setName(txtName.getText());
-        e.setCpf(ftxtCpf.getText());
-        e.setTel(ftxtTel.getText());
-        e.setEmail(ftxtEmail.getText());
-        e.setAddress(txtAddress.getText());
-        e.setPosition(txtPosition.getText());
-        e.setWorkHours(Integer.parseInt(txtWorkHours.getText()));
-        e.setSalary(ftxtSalary.getText());
-        e.setContractDate(ftxtContractDate.getText());
-            
-        list.add(e);  // adicionando em uma lista, sem BD
-        EmployeeDAO clientDAO = new EmployeeDAO();
-        clientDAO.insert(e);
+        String[] employee = new String[5];
+        
+        employee[0] = txtName.getText();
+        employee[1] = (ftxtCpf.getText());
+        employee[2] = (ftxtTel.getText());
+        employee[3] = (txtAddress.getText());
+        employee[4] = (ftxtEmail.getText());
+        employee[5] = (txtPosition.getText());
+        employee[6] = (txtWorkHours.getText());
+        employee[7] = (ftxtSalary.getText());
+        employee[8] = (ftxtContractDate.getText());
+        
+        employeeController.createEmployee(employee);
     }
     
-    public void objectToFields(Employee e) {        
-        txtName.setText(e.getName());
-        ftxtCpf.setText(e.getCpf());
-        ftxtTel.setText(e.getTel());
-        ftxtEmail.setText(e.getEmail());
-        txtAddress.setText(e.getAddress());
-        txtPosition.setText(e.getPosition());
-        String hours = Integer.toString(e.getWorkHours());
-        txtWorkHours.setText(hours);
-        ftxtSalary.setText(e.getSalary());
-        ftxtContractDate.setText(e.getContractDate());       
+    public void objectToFields(String[] p) {
+        txtName.setText(p[0]);
+        ftxtCpf.setText(p[1]);
+        ftxtTel.setText(p[2]);
+        txtAddress.setText(p[3]);
+        ftxtEmail.setText(p[4]);
+        txtPosition.setText(p[5]);
+        txtWorkHours.setText(p[6]);
+        ftxtSalary.setText(p[7]);
+        ftxtContractDate.setText(p[8]);
     }
 
-    public Employee searchEmployee(String code) {
-        for(int i = 0; i < list.size(); i++) {
-            if(list.get(i).getCpf().equals(code)) return list.get(i);
+    public String[] searchEmployee(String code) {
+        String[] response = employeeController.getEmployeeByCpf(code);
+        if(!response[0].equals("")) {
+            return response;
         }
         return null;
     }
     
     public void printEmployeeList() {
-        String [] column = {"Nome", "CPF", "Telefone/Whatsapp", "Salário"};
+        String[] column = {"Nome", "CPF", "Telefone/Whatsapp"};
         DefaultTableModel model = new DefaultTableModel(column, 0);
-        
-        for(int i = 0; i < list.size(); i++) {
-            Object [] row = {list.get(i).getName(), list.get(i).getCpf(), list.get(i).getTel(), list.get(i).getSalary()};
+
+       ArrayList<String []> response = employeeController.getEmployees();
+       
+        for(int i = 0; i < response.size(); i++) {
+            Object [] row = {response.get(i)[0], response.get(i)[1], response.get(i)[2]};
             model.addRow(row);
         }
         tblListing.setModel(model);
     }
     
-    public void printEmployee(Employee e) {
-        String [] column = {"Nome", "CPF", "Telefone/Whatsapp", "Salário"};
+    public void printEmployee(String p[]) {
+        String [] column = {"Nome", "CPF", "Telefone/Whatsapp"};
         DefaultTableModel model = new DefaultTableModel(column, 0);
         
-        Object [] row = {e.getName(), e.getCpf(), e.getTel(), e.getSalary()};
+        Object [] row = {p[0], p[1], p[2]};
         model.addRow(row);
         tblListing.setModel(model);
     }
@@ -263,7 +259,7 @@ public class EmployeeForm extends javax.swing.JFrame {
         label1.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         label1.setText("Cadastro de Funcionário");
 
-        btnSearch.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\ERE_LPS_TAREFA1_RAYANNE\\CRUD\\src\\main\\java\\images\\search.png")); // NOI18N
+        btnSearch.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\Oficina\\MVC\\src\\main\\java\\images\\search.png")); // NOI18N
         btnSearch.setIconTextGap(0);
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -272,7 +268,7 @@ public class EmployeeForm extends javax.swing.JFrame {
         });
 
         btnNew.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btnNew.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\ERE_LPS_TAREFA1_RAYANNE\\CRUD\\src\\main\\java\\images\\add.png")); // NOI18N
+        btnNew.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\Oficina\\MVC\\src\\main\\java\\images\\add.png")); // NOI18N
         btnNew.setText("Novo");
         btnNew.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnNew.addActionListener(new java.awt.event.ActionListener() {
@@ -282,7 +278,7 @@ public class EmployeeForm extends javax.swing.JFrame {
         });
 
         btnEdit.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btnEdit.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\ERE_LPS_TAREFA1_RAYANNE\\CRUD\\src\\main\\java\\images\\edit.png")); // NOI18N
+        btnEdit.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\Oficina\\MVC\\src\\main\\java\\images\\edit.png")); // NOI18N
         btnEdit.setText("Editar");
         btnEdit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnEdit.setMaximumSize(new java.awt.Dimension(89, 33));
@@ -295,7 +291,7 @@ public class EmployeeForm extends javax.swing.JFrame {
         });
 
         btnDelete.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btnDelete.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\ERE_LPS_TAREFA1_RAYANNE\\CRUD\\src\\main\\java\\images\\delete.png")); // NOI18N
+        btnDelete.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\Oficina\\MVC\\src\\main\\java\\images\\delete.png")); // NOI18N
         btnDelete.setText("Excluir");
         btnDelete.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnDelete.setMaximumSize(new java.awt.Dimension(89, 33));
@@ -308,7 +304,7 @@ public class EmployeeForm extends javax.swing.JFrame {
         });
 
         BtnCancel.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        BtnCancel.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\ERE_LPS_TAREFA1_RAYANNE\\CRUD\\src\\main\\java\\images\\cancel.png")); // NOI18N
+        BtnCancel.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\Oficina\\MVC\\src\\main\\java\\images\\cancel.png")); // NOI18N
         BtnCancel.setText("Cancelar");
         BtnCancel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         BtnCancel.setMaximumSize(new java.awt.Dimension(89, 33));
@@ -321,7 +317,7 @@ public class EmployeeForm extends javax.swing.JFrame {
         });
 
         btnSave.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btnSave.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\ERE_LPS_TAREFA1_RAYANNE\\CRUD\\src\\main\\java\\images\\save.png")); // NOI18N
+        btnSave.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\Oficina\\MVC\\src\\main\\java\\images\\save.png")); // NOI18N
         btnSave.setText("Salvar");
         btnSave.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSave.setMaximumSize(new java.awt.Dimension(89, 33));
@@ -463,7 +459,7 @@ public class EmployeeForm extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tblListing);
 
-        btnRefresh2.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\ERE_LPS_TAREFA1_RAYANNE\\CRUD\\src\\main\\java\\images\\refresh.png")); // NOI18N
+        btnRefresh2.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\Oficina\\MVC\\src\\main\\java\\images\\refresh.png")); // NOI18N
         btnRefresh2.setIconTextGap(0);
         btnRefresh2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -562,8 +558,8 @@ public class EmployeeForm extends javax.swing.JFrame {
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         String chosenCpf = ftxtSearch.getText();
         
-        Employee e = this.searchEmployee(chosenCpf);
-
+        String[] p = this.searchEmployee(chosenCpf);
+        
         if(chosenCpf.isEmpty()) {
             JOptionPane.showMessageDialog(this, "O CPF não foi informado!");
             printEmployeeList();
@@ -572,12 +568,12 @@ public class EmployeeForm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Preencha o CPF corretamente.");
             ftxtSearch.requestFocus();
         }
-        else if(e == null) {
+        else if(p == null) {
             JOptionPane.showMessageDialog(this, "Não existe funcionário para o CPF informado!");
             printEmployeeList();
         } else {
             ftxtSearch.setText("");
-            printEmployee(e);
+            printEmployee(p);
         }
     }//GEN-LAST:event_btnSearchActionPerformed
 
@@ -607,22 +603,22 @@ public class EmployeeForm extends javax.swing.JFrame {
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         String chosenCode = JOptionPane.showInputDialog("Informe o CPF do funcionário que deseja excluir:", "");
         String maskCpf = chosenCode.substring(0, 3) + "." + chosenCode.substring(3, 6) + "." + chosenCode.substring(6, 9) + "-" + chosenCode.substring(9, 11);
-
-        Employee e = this.searchEmployee(maskCpf);
-
-        if(e == null) {
+        
+        String[] p = this.searchEmployee(maskCpf);
+        
+        if(p == null) {
             JOptionPane.showMessageDialog(this, "Não foi encontrado um funcionário para o CPF informado.");
         } else {
             Object[] options = { "Sim", "Não", "Cancelar" };
             int i = JOptionPane.showOptionDialog(this, "O funcionário foi encontrado.", "Deseja realmente excluir?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
             if(i == 0) {
-                list.remove(e);
+                employeeController.deleteEmployee(maskCpf);
                 JOptionPane.showMessageDialog(this, "O funcionário foi excluído com sucesso.");
             }else {
                 JOptionPane.showMessageDialog(this, "Exclusão cancelada.");
             }
         }
-        printEmployeeList();
+        printEmployeeList();   
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void BtnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCancelActionPerformed
@@ -635,13 +631,12 @@ public class EmployeeForm extends javax.swing.JFrame {
     }//GEN-LAST:event_BtnCancelActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-               
-        if(validateFields()){
+        if(validateFields()) {
             if(this.employeeEditing == null) { // inserindo novo funcionário
                 this.fieldsToObject();
             } else { // salvando um funcionário que foi alterado
-                this.list.remove(this.employeeEditing);
-                this.fieldsToObject();
+                employeeController.updateEmployee(this.employeeEditing);
+                printEmployeeList();
             }
 
             this.clearFields();
@@ -650,7 +645,6 @@ public class EmployeeForm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "O funcionário foi salvo com sucesso.");
             printEmployeeList();
         }
-
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnRefresh2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefresh2ActionPerformed

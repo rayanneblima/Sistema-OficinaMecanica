@@ -147,7 +147,7 @@
     <Component class="javax.swing.JButton" name="btnSearch">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="2" name="C:\Users\Rayanne\Desktop\Estudos\IF\2020.2\LPS\ERE_LPS_TAREFA1_RAYANNE\CRUD\src\main\java\images\search.png"/>
+          <Image iconType="2" name="C:\Users\Rayanne\Desktop\Estudos\IF\2020.2\LPS\Oficina\MVC\src\main\java\images\search.png"/>
         </Property>
         <Property name="iconTextGap" type="int" value="0"/>
       </Properties>
@@ -163,7 +163,7 @@
           <Font name="Arial" size="12" style="0"/>
         </Property>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="2" name="C:\Users\Rayanne\Desktop\Estudos\IF\2020.2\LPS\ERE_LPS_TAREFA1_RAYANNE\CRUD\src\main\java\images\add.png"/>
+          <Image iconType="2" name="C:\Users\Rayanne\Desktop\Estudos\IF\2020.2\LPS\Oficina\MVC\src\main\java\images\add.png"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Novo"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
@@ -180,7 +180,7 @@
           <Font name="Arial" size="12" style="0"/>
         </Property>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="2" name="C:\Users\Rayanne\Desktop\Estudos\IF\2020.2\LPS\ERE_LPS_TAREFA1_RAYANNE\CRUD\src\main\java\images\edit.png"/>
+          <Image iconType="2" name="C:\Users\Rayanne\Desktop\Estudos\IF\2020.2\LPS\Oficina\MVC\src\main\java\images\edit.png"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Editar"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
@@ -206,7 +206,7 @@
           <Font name="Arial" size="12" style="0"/>
         </Property>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="2" name="C:\Users\Rayanne\Desktop\Estudos\IF\2020.2\LPS\ERE_LPS_TAREFA1_RAYANNE\CRUD\src\main\java\images\delete.png"/>
+          <Image iconType="2" name="C:\Users\Rayanne\Desktop\Estudos\IF\2020.2\LPS\Oficina\MVC\src\main\java\images\delete.png"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Excluir"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
@@ -232,7 +232,7 @@
           <Font name="Arial" size="12" style="0"/>
         </Property>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="2" name="C:\Users\Rayanne\Desktop\Estudos\IF\2020.2\LPS\ERE_LPS_TAREFA1_RAYANNE\CRUD\src\main\java\images\cancel.png"/>
+          <Image iconType="2" name="C:\Users\Rayanne\Desktop\Estudos\IF\2020.2\LPS\Oficina\MVC\src\main\java\images\cancel.png"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Cancelar"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
@@ -258,7 +258,7 @@
           <Font name="Arial" size="12" style="0"/>
         </Property>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="2" name="C:\Users\Rayanne\Desktop\Estudos\IF\2020.2\LPS\ERE_LPS_TAREFA1_RAYANNE\CRUD\src\main\java\images\save.png"/>
+          <Image iconType="2" name="C:\Users\Rayanne\Desktop\Estudos\IF\2020.2\LPS\Oficina\MVC\src\main\java\images\save.png"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Salvar"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
@@ -523,7 +523,7 @@
     <Component class="javax.swing.JButton" name="btnRefresh2">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="2" name="C:\Users\Rayanne\Desktop\Estudos\IF\2020.2\LPS\ERE_LPS_TAREFA1_RAYANNE\CRUD\src\main\java\images\refresh.png"/>
+          <Image iconType="2" name="C:\Users\Rayanne\Desktop\Estudos\IF\2020.2\LPS\Oficina\MVC\src\main\java\images\refresh.png"/>
         </Property>
         <Property name="iconTextGap" type="int" value="0"/>
       </Properties>

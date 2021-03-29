@@ -17,16 +17,16 @@ public class ClientDAO {
         this.conn = this.dbConnection.getConnection();
     }
     
-    public void insert(Person person) {
+    public void insert(String[] p) {
         String idPerson = null;
         String insertPerson = "INSERT INTO person(name, cpf, tel, address, email) VALUES " + "(?, ? , ? , ?, ?)";
         try {
             PreparedStatement stmt = this.conn.prepareStatement(insertPerson, PreparedStatement.RETURN_GENERATED_KEYS);
-            stmt.setString(1, person.getName());
-            stmt.setString(2, person.getCpf());
-            stmt.setString(3, person.getTel());
-            stmt.setString(4, person.getAddress());
-            stmt.setString(5, person.getEmail());
+            stmt.setString(1, p[0]);
+            stmt.setString(2, p[1]);
+            stmt.setString(3, p[2]);
+            stmt.setString(4, p[3]);
+            stmt.setString(5, p[4]);
             stmt.execute();
             
             ResultSet rs = stmt.getGeneratedKeys();
@@ -120,6 +120,11 @@ public class ClientDAO {
     }
 
     public void updateClient(String[] p) {
+        System.out.println(p[0]);
+        System.out.println(p[1]);
+        System.out.println(p[2]);
+        System.out.println(p[3]);
+        System.out.println(p[4]);
         try {
             String sql = "UPDATE person set name=?, cpf=?, tel=?, address=?, email=? WHERE cpf=?";
             PreparedStatement stmt = conn.prepareStatement(sql);
@@ -129,7 +134,7 @@ public class ClientDAO {
             stmt.setString(3, p[2]);
             stmt.setString(4, p[3]);
             stmt.setString(5, p[4]);
-            stmt.setString(6, p[5]);
+            stmt.setString(6, p[1]);
 
             stmt.execute();
         } catch (SQLException ex) {

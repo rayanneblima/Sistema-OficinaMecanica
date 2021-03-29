@@ -1,9 +1,6 @@
 package view;
 
 import controller.ClientController;
-import model.Client;
-import model.Person;
-import model.dao.ClientDAO;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -19,6 +16,7 @@ public class ClientForm extends javax.swing.JFrame {
     
     public ClientForm(ClientController clientController) {
         this.clientEditing = null;
+        this.clientController = clientController;
         
         initComponents();
         
@@ -55,24 +53,24 @@ public class ClientForm extends javax.swing.JFrame {
     }
     
     public void fieldsToObject() {
-        Client c = new Client();
+        String[] client = new String[5];
         
-        c.setName(txtName.getText());
-        c.setCpf(ftxtCpf.getText());
-        c.setTel(ftxtTel.getText());
-        c.setEmail(txtEmail.getText());
-        c.setAddress(txtAddress.getText());
-        c.setVehicles(txtVehicles.getText());  
+        client[0] = txtName.getText();
+        client[1] = (ftxtCpf.getText());
+        client[2] = (ftxtTel.getText());
+        client[3] = (txtAddress.getText());
+        client[4] = (txtEmail.getText());
+        //c.setVehicles(txtVehicles.getText());  
         
-        clientController.createClient(c);
+        clientController.createClient(client);
     }
     
     public void objectToFields(String[] p) {
         txtName.setText(p[0]);
         ftxtCpf.setText(p[1]);
         ftxtTel.setText(p[2]);
-        txtEmail.setText(p[3]);
-        txtAddress.setText(p[4]);
+        txtAddress.setText(p[3]);
+        txtEmail.setText(p[4]);
     }
     
     public String[] searchClient(String code) {
@@ -86,8 +84,8 @@ public class ClientForm extends javax.swing.JFrame {
     public void printClientList() {
         String[] column = {"Nome", "CPF", "Telefone/Whatsapp"};
         DefaultTableModel model = new DefaultTableModel(column, 0);
-        
-        ArrayList<String []> response = clientController.getClients();
+
+       ArrayList<String []> response = clientController.getClients();
        
         for(int i = 0; i < response.size(); i++) {
             Object [] row = {response.get(i)[0], response.get(i)[1], response.get(i)[2]};
@@ -228,7 +226,7 @@ public class ClientForm extends javax.swing.JFrame {
         label1.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         label1.setText("Cadastro de Cliente");
 
-        btnSearch.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\ERE_LPS_TAREFA1_RAYANNE\\CRUD\\src\\main\\java\\images\\search.png")); // NOI18N
+        btnSearch.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\Oficina\\MVC\\src\\main\\java\\images\\search.png")); // NOI18N
         btnSearch.setIconTextGap(0);
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -237,7 +235,7 @@ public class ClientForm extends javax.swing.JFrame {
         });
 
         btnNew.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btnNew.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\ERE_LPS_TAREFA1_RAYANNE\\CRUD\\src\\main\\java\\images\\add.png")); // NOI18N
+        btnNew.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\Oficina\\MVC\\src\\main\\java\\images\\add.png")); // NOI18N
         btnNew.setText("Novo");
         btnNew.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnNew.addActionListener(new java.awt.event.ActionListener() {
@@ -247,7 +245,7 @@ public class ClientForm extends javax.swing.JFrame {
         });
 
         btnEdit.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btnEdit.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\ERE_LPS_TAREFA1_RAYANNE\\CRUD\\src\\main\\java\\images\\edit.png")); // NOI18N
+        btnEdit.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\Oficina\\MVC\\src\\main\\java\\images\\edit.png")); // NOI18N
         btnEdit.setText("Editar");
         btnEdit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnEdit.setMaximumSize(new java.awt.Dimension(89, 33));
@@ -260,7 +258,7 @@ public class ClientForm extends javax.swing.JFrame {
         });
 
         btnDelete.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btnDelete.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\ERE_LPS_TAREFA1_RAYANNE\\CRUD\\src\\main\\java\\images\\delete.png")); // NOI18N
+        btnDelete.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\Oficina\\MVC\\src\\main\\java\\images\\delete.png")); // NOI18N
         btnDelete.setText("Excluir");
         btnDelete.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnDelete.setMaximumSize(new java.awt.Dimension(89, 33));
@@ -273,7 +271,7 @@ public class ClientForm extends javax.swing.JFrame {
         });
 
         BtnCancel.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        BtnCancel.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\ERE_LPS_TAREFA1_RAYANNE\\CRUD\\src\\main\\java\\images\\cancel.png")); // NOI18N
+        BtnCancel.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\Oficina\\MVC\\src\\main\\java\\images\\cancel.png")); // NOI18N
         BtnCancel.setText("Cancelar");
         BtnCancel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         BtnCancel.setMaximumSize(new java.awt.Dimension(89, 33));
@@ -286,7 +284,7 @@ public class ClientForm extends javax.swing.JFrame {
         });
 
         btnSave.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btnSave.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\ERE_LPS_TAREFA1_RAYANNE\\CRUD\\src\\main\\java\\images\\save.png")); // NOI18N
+        btnSave.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\Oficina\\MVC\\src\\main\\java\\images\\save.png")); // NOI18N
         btnSave.setText("Salvar");
         btnSave.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSave.setMaximumSize(new java.awt.Dimension(89, 33));
@@ -407,7 +405,7 @@ public class ClientForm extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tblListing);
 
-        btnRefresh.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\ERE_LPS_TAREFA1_RAYANNE\\CRUD\\src\\main\\java\\images\\refresh.png")); // NOI18N
+        btnRefresh.setIcon(new javax.swing.ImageIcon("C:\\Users\\Rayanne\\Desktop\\Estudos\\IF\\2020.2\\LPS\\Oficina\\MVC\\src\\main\\java\\images\\refresh.png")); // NOI18N
         btnRefresh.setIconTextGap(0);
         btnRefresh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -548,9 +546,7 @@ public class ClientForm extends javax.swing.JFrame {
             Object[] options = { "Sim", "Não", "Cancelar" };
             int i = JOptionPane.showOptionDialog(this, "O cliente foi encontrado.", "Deseja realmente excluir?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
             if(i == 0) {
-                // TODO change to MVC
-                ClientDAO clientDAO = new ClientDAO();
-                clientDAO.deleteClient(maskCpf);
+                clientController.deleteClient(maskCpf);
                 JOptionPane.showMessageDialog(this, "O cliente foi excluído com sucesso.");
             }else {
                 JOptionPane.showMessageDialog(this, "Exclusão cancelada.");
