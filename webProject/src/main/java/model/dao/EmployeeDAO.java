@@ -3,9 +3,12 @@ package model.dao;
 import model.Employee;
 import connection.DBConnection;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import model.Person;
 
@@ -18,9 +21,10 @@ public class EmployeeDAO {
         this.conn = this.dbConnection.getConnection();
     }
     
-    public void insert(String[] p) {
+    public boolean insert(String[] p, String[] e) throws ParseException {
         String idPerson = null;
         String insertPerson = "INSERT INTO person(name, cpf, tel, address, email) VALUES " + "(?, ? , ? , ?, ?)";
+        
         try {
             PreparedStatement stmt = this.conn.prepareStatement(insertPerson, PreparedStatement.RETURN_GENERATED_KEYS);
             stmt.setString(1, p[0]);
@@ -34,17 +38,25 @@ public class EmployeeDAO {
             if (rs.next()){
                 idPerson = rs.getString(1);
             }
-            insertEmployee(idPerson);
+            insertEmployee(idPerson, e);
+            return true;
         } catch (SQLException error) {
             System.out.println("Erro ao inserir um funcionário: " + error.getMessage());
+            return false;
         }
     }
     
-    public void insertEmployee(String id) {
-        String insertEmployee = "INSERT INTO employee(id_person) VALUES " + "(?)";
+    public void insertEmployee(String id, String[] e) throws ParseException {
+        String insertEmployee = "INSERT INTO employee(id_person, position, salary, workHours, contractDate) VALUES " + "(?, ?, ?, ?, ?)";
         try {
             PreparedStatement stmt = this.conn.prepareStatement(insertEmployee);
             stmt.setString(1, id);
+            stmt.setString(2, e[0]);
+            stmt.setString(3, e[1]);
+            stmt.setString(4, e[2]);
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+            Date date = new Date(format.parse(e[3]).getTime());
+            stmt.setDate(5, date);
             stmt.execute();
         } catch (SQLException error) {
             System.out.println("Erro ao inserir um funcionário: " + error.getMessage());

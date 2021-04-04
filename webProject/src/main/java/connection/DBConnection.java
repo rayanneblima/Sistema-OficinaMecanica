@@ -9,6 +9,7 @@ public class DBConnection {
     
     public Connection getConnection() {
         try {
+            DriverManager.registerDriver(new com.mysql.jdbc.Driver());
             Connection conn = DriverManager.getConnection(
                 "jdbc:mysql://localhost:3306/lps_oficina?serverTimeZone=UTC", // linha de conexão
                 "root", // usuario

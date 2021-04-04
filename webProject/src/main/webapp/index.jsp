@@ -8,7 +8,7 @@
 </head>
 <body class="pt-5">
     <h1 class="text-center">Cadastrar novo funcionário</h1>
-    <form class="d-flex flex-column w-75 m-auto" method="POST" action="EmployeeController" name="frmAddEmployee">
+    <form class="d-flex flex-column w-75 m-auto" method="POST" action="EmployeeController">
         <label class="mb-1">Nome Completo:</label>
         <input
             type="text" 
@@ -47,7 +47,40 @@
             name="email"
             id="email"
             placeholder="E-mail"
+            class="mb-2" />
+        
+        <label class="mb-1">Cargo:</label>
+        <input 
+            type="text"
+            name="position"
+            id="position"
+            placeholder="Cargo"
             class="mb-2" />  
+        
+        <label class="mb-1">Salário:</label>
+        <input 
+            type="text"
+            name="salary"
+            id="salary"
+            placeholder="Salário"
+            class="mb-2" />
+        
+        <label class="mb-1">Carga Horária:</label>
+        <input 
+            type="text"
+            name="workHours"
+            id="workHours"
+            placeholder="Carga Horária"
+            class="mb-2" />  
+        
+        <label class="mb-1">Data de Contratação: </label>
+        <input 
+            type="text"
+            name="contractDate"
+            id="contractDate"
+            placeholder="00/00/0000"
+            class="mb-2" />  
+        
         <input type="submit" value="Submit" class="btn btn-primary w-25 align-self-end" />
     </form>
 </body>

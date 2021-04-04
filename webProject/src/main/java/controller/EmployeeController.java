@@ -21,18 +21,28 @@ public class EmployeeController extends HttpServlet {
         dao = new EmployeeDAO();
     }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);
     }
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String[] employee = new String[5];
-        employee[0] = (request.getParameter("name"));
-        employee[1] = (request.getParameter("cpf"));
-        employee[2] = (request.getParameter("tel"));
-        employee[3] = (request.getParameter("address"));
-        employee[4] = (request.getParameter("email"));
+        String[] person = new String[5];
+        person[0] = (request.getParameter("name"));
+        person[1] = (request.getParameter("cpf"));
+        person[2] = (request.getParameter("tel"));
+        person[3] = (request.getParameter("address"));
+        person[4] = (request.getParameter("email"));
         
-        dao.insert(employee);
+        String[] employee = new String[4];
+        employee[0] = (request.getParameter("position"));
+        employee[1] = (request.getParameter("salary"));
+        employee[2] = (request.getParameter("workHours"));
+        employee[3] = (request.getParameter("contractDate"));
+        
+        if(dao.insert(person, employee)) {
+            System.out.println("SUCESSO!");
+        }
     }
 }
